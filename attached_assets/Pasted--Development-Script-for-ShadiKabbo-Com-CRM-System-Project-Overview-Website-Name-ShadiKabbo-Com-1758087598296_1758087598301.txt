@@ -1,0 +1,228 @@
+📜 Development Script for ShadiKabbo.Com CRM System
+🔹 Project Overview
+Website Name: ShadiKabbo.Com
+
+Subject: CRM System for matchmaking & client management
+
+Platforms:
+
+Web version (fully responsive, high animation, professional UI/UX)
+
+Mobile app (APK download link or QR code on website for Android users)
+
+🔹 Pages to Develop
+1. Login Page
+Theme: Black + Red animated background (modern gradient animation).
+
+Left Side:
+
+Company logo (already uploaded).
+
+Under logo: short description (matchmaking-related).
+
+Right Side (centered):
+
+Login form with fields:
+
+Email
+
+Password
+
+Below form: "Forgot Password" link.
+
+Below that: Login button.
+
+Default Super Admin Credentials:
+
+Email: sohaghasunbd@gmail.com
+
+Password: Sohagq301
+
+Validation:
+
+If email & password correct → redirect to Main Site.
+
+If incorrect → show error message.
+
+2. Main Site (After Login)
+Top Left Corner: Company logo.
+
+Top Right Corner: Profile picture + Profile name + Account role.
+
+Left Sidebar Menu:
+
+Dashboard
+
+Traffic
+
+Account
+
+Tracking
+
+Paid Client
+
+Success Story
+
+HRM
+
+Settings
+
+Logout
+
+🔹 Section Details
+Dashboard
+Live Results (auto-updating):
+
+Total Traffic
+
+Total Paid Clients
+
+Total Success Stories
+
+Total Payment
+
+Table (auto-updating with CRM data):
+
+Date
+
+Traffic
+
+Paid Client
+
+Payment Amount
+
+Matchmaking
+
+Traffic
+Table Columns:
+
+Date
+
+Name
+
+Contact
+
+Created By
+
+Action (Buttons: View, Edit, Delete)
+
+Top Left Button: + Add Traffic
+
+Opens Step-by-Step Popup Form with sections:
+
+Step 1: Basic Info
+Name
+
+Contact Number
+
+Email Address
+
+Step 2: Advance Info
+Priority (dropdown)
+
+Status (dropdown)
+
+Assigned By (dropdown → all matchmaker role accounts)
+
+Profession (dropdown)
+
+Job Type (dropdown)
+
+Date of Birth (DD/MM/YYYY)
+
+Marital Status (dropdown)
+
+Gender (dropdown)
+
+Permanent Country (dropdown)
+
+Permanent City (dropdown)
+
+Present Country (dropdown)
+
+Present City (dropdown)
+
+Height (dropdown)
+
+Qualification (dropdown)
+
+Organization (dropdown)
+
+Religion (dropdown)
+
+Social Title (dropdown)
+
+Profile Picture (upload)
+
+Candidate Pictures (1–10 uploads, JPG/PNG/PDF)
+
+Curriculum Vitae (PDF upload)
+
+Requirement (large text box)
+
+Step 3: Payment Info
+Package Type (dropdown)
+
+Paid Amount (manual input)
+
+Discount Amount (manual input)
+
+Due Amount (auto-calculated)
+
+Total Amount (auto-calculated, read-only)
+
+Payment Method (dropdown)
+
+After Marriage Fee (manual input)
+
+Final Button: Apply for Paid Client → sends data to Payment Request Section.
+
+After Save: Auto-generate Invoice with:
+
+Company Logo
+
+Company Address: 2nd Floor - Mohammadia Super Market, 4 Sobhanbag Road, Dhanmondi-27, Dhaka, Bangladesh, 1209
+
+Terms & Conditions (provided text)
+
+Auto-filled payment details
+
+🔹 Invoice Format
+Auto-generated after each Add Traffic → Payment Info completion.
+
+Includes:
+
+Company Logo
+
+Company Address
+
+Terms & Conditions (system-generated, no signature required).
+
+🔹 Mobile App Integration
+Create APK version of CRM system.
+
+On website, add QR Code + Download Link for APK.
+
+Users can scan/download to use CRM on mobile.
+
+🔹 Design & UI/UX Requirements
+Fully professional, corporate-grade design.
+
+High-quality animations & shadows.
+
+Buttons & text must be premium quality.
+
+Color scheme must match company logo.
+
+Smooth transitions & responsive layout.
+
+🔹 Deployment Instructions
+Deploy web version first with all above features.
+
+Generate APK build for mobile app.
+
+Add QR code + download link on website for mobile users.
+
+Ensure real-time updates (Dashboard & Traffic auto-refresh with CRM data).
+
+✅ This script contains all requirements for the developer to build the CRM system exactly as requested.
