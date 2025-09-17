@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import logoPath from "@assets/Logo png_1758087604918.png";
 import { 
   LayoutDashboard, 
   Users, 
@@ -30,25 +31,27 @@ export function Sidebar() {
   const [location] = useLocation();
   const { user, logoutMutation } = useAuth();
 
-  // Company logo SVG
-  const logoSvg = `data:image/svg+xml;base64,${btoa(`
-    <svg width="150" height="40" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="150" height="40" fill="#1E3A8A" rx="8"/>
-      <style>.logo{font-family:Inter,sans-serif;font-weight:bold;font-size:16px;fill:#F8FAFC}</style>
-      <style>.sub{font-family:Inter,sans-serif;font-weight:500;font-size:8px;fill:#DC6626}</style>
-      <text x="75" y="20" text-anchor="middle" class="logo">SHADI KABBO.COM</text>
-      <text x="75" y="30" text-anchor="middle" class="sub">Matchmaking CRM</text>
-    </svg>
-  `)}`;
+  const getRoleDisplayName = (role: string | undefined) => {
+    switch (role) {
+      case 'cro_agent':
+        return 'CRO Agent';
+      case 'matchmaker':
+        return 'Matchmaker';
+      case 'super_admin':
+        return 'Super Admin';
+      default:
+        return 'User';
+    }
+  };
 
   return (
     <div className="w-64 bg-card border-r border-border min-h-screen flex flex-col">
       {/* Header */}
       <div className="p-4 border-b border-border flex items-center justify-between">
         <img 
-          src={logoSvg}
+          src={logoPath}
           alt="ShadiKabbo Logo" 
-          className="h-10"
+          className="h-10 object-contain"
           data-testid="img-logo"
         />
       </div>
@@ -63,10 +66,10 @@ export function Sidebar() {
           </Avatar>
           <div className="px-3 flex-1 min-w-0">
             <div className="text-sm font-medium text-foreground truncate" data-testid="text-username">
-              {user?.role === 'admin' ? 'Super Admin' : user?.username}
+              {user?.username}
             </div>
             <div className="text-xs text-muted-foreground" data-testid="text-user-role">
-              Administrator
+              {getRoleDisplayName(user?.role)}
             </div>
           </div>
           <Button 

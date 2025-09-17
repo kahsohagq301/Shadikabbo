@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Eye, EyeOff, Loader2, LogIn, UserPlus } from "lucide-react";
 import logoPath from "@assets/Logo png_1758087604918.png";
 
@@ -20,6 +21,7 @@ export default function LoginPage() {
   const [registerForm, setRegisterForm] = useState({
     username: "",
     password: "",
+    role: "cro_agent" as "cro_agent" | "matchmaker" | "super_admin",
   });
   const [loginError, setLoginError] = useState<string>("");
 
@@ -85,10 +87,10 @@ export default function LoginPage() {
           <div className="lg:w-1/2 w-full max-w-md">
             <Card className="glass-effect login-card border-white/10">
               <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold text-white mb-2">
-                  Admin Access
+                <CardTitle className="text-3xl font-bold text-foreground mb-2">
+                  Access Portal
                 </CardTitle>
-                <p className="text-gray-300">Manage your CRM dashboard</p>
+                <p className="text-muted-foreground">CRO Agent • Matchmaker • Super Admin</p>
               </CardHeader>
               
               <CardContent>
@@ -175,7 +177,7 @@ export default function LoginPage() {
                   <TabsContent value="register">
                     <form onSubmit={handleRegister} className="space-y-4">
                       <div>
-                        <Label htmlFor="reg-username" className="text-gray-200">Username</Label>
+                        <Label htmlFor="reg-username" className="text-muted-foreground">Username</Label>
                         <Input
                           id="reg-username"
                           type="text"
@@ -189,7 +191,7 @@ export default function LoginPage() {
                       </div>
 
                       <div>
-                        <Label htmlFor="reg-password" className="text-gray-200">Password</Label>
+                        <Label htmlFor="reg-password" className="text-muted-foreground">Password</Label>
                         <Input
                           id="reg-password"
                           type="password"
@@ -200,6 +202,20 @@ export default function LoginPage() {
                           data-testid="input-register-password"
                           required
                         />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="reg-role" className="text-muted-foreground">Role</Label>
+                        <Select value={registerForm.role} onValueChange={(value: "cro_agent" | "matchmaker" | "super_admin") => setRegisterForm({ ...registerForm, role: value })}>
+                          <SelectTrigger className="bg-input border-border text-foreground mt-1" data-testid="select-register-role">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="cro_agent">CRO Agent</SelectItem>
+                            <SelectItem value="matchmaker">Matchmaker</SelectItem>
+                            <SelectItem value="super_admin">Super Admin</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       <Button 

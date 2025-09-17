@@ -7,7 +7,7 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
-  role: text("role").notNull().default("admin"),
+  role: text("role").notNull().default("cro_agent"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -58,6 +58,9 @@ export const payments = pgTable("payments", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  role: true,
+}).extend({
+  role: z.enum(["cro_agent", "matchmaker", "super_admin"]).default("cro_agent"),
 });
 
 export const insertTrafficSchema = createInsertSchema(traffic).omit({

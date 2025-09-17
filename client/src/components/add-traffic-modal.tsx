@@ -25,10 +25,23 @@ interface TrafficForm {
   // Step 2: Advanced Info
   priority: string;
   status: string;
-  gender: string;
+  profession: string;
+  jobType: string;
   dateOfBirth: string;
+  maritalStatus: string;
+  gender: string;
+  permanentCountry: string;
+  permanentCity: string;
+  presentCountry: string;
+  presentCity: string;
   height: string;
+  qualification: string;
+  organization: string;
   religion: string;
+  socialTitle: string;
+  profilePicture: string;
+  candidatePictures: string[];
+  curriculumVitae: string;
   requirements: string;
   
   // Step 3: Payment Info
@@ -47,11 +60,24 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
     contactNumber: "",
     email: "",
     priority: "medium",
-    status: "pending", 
-    gender: "",
+    status: "pending",
+    profession: "",
+    jobType: "",
     dateOfBirth: "",
+    maritalStatus: "",
+    gender: "",
+    permanentCountry: "",
+    permanentCity: "",
+    presentCountry: "",
+    presentCity: "",
     height: "",
+    qualification: "",
+    organization: "",
     religion: "",
+    socialTitle: "",
+    profilePicture: "",
+    candidatePictures: [],
+    curriculumVitae: "",
     requirements: "",
     packageType: "",
     paidAmount: 0,
@@ -91,10 +117,23 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
       email: "",
       priority: "medium",
       status: "pending",
-      gender: "",
+      profession: "",
+      jobType: "",
       dateOfBirth: "",
+      maritalStatus: "",
+      gender: "",
+      permanentCountry: "",
+      permanentCity: "",
+      presentCountry: "",
+      presentCity: "",
       height: "",
+      qualification: "",
+      organization: "",
       religion: "",
+      socialTitle: "",
+      profilePicture: "",
+      candidatePictures: [],
+      curriculumVitae: "",
       requirements: "",
       packageType: "",
       paidAmount: 0,
@@ -316,6 +355,103 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                 </Select>
               </div>
               <div>
+                <Label htmlFor="maritalStatus">Marital Status</Label>
+                <Select value={formData.maritalStatus} onValueChange={(value) => updateFormData("maritalStatus", value)}>
+                  <SelectTrigger data-testid="select-marital-status">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="single">Single</SelectItem>
+                    <SelectItem value="divorced">Divorced</SelectItem>
+                    <SelectItem value="widowed">Widowed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="profession">Profession</Label>
+                <Input
+                  id="profession"
+                  value={formData.profession}
+                  onChange={(e) => updateFormData("profession", e.target.value)}
+                  placeholder="Enter profession"
+                  data-testid="input-profession"
+                />
+              </div>
+              <div>
+                <Label htmlFor="jobType">Job Type</Label>
+                <Select value={formData.jobType} onValueChange={(value) => updateFormData("jobType", value)}>
+                  <SelectTrigger data-testid="select-job-type">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="government">Government</SelectItem>
+                    <SelectItem value="private">Private</SelectItem>
+                    <SelectItem value="business">Business</SelectItem>
+                    <SelectItem value="freelance">Freelance</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="permanentCountry">Permanent Country</Label>
+                <Input
+                  id="permanentCountry"
+                  value={formData.permanentCountry}
+                  onChange={(e) => updateFormData("permanentCountry", e.target.value)}
+                  placeholder="Enter permanent country"
+                  data-testid="input-permanent-country"
+                />
+              </div>
+              <div>
+                <Label htmlFor="permanentCity">Permanent City</Label>
+                <Input
+                  id="permanentCity"
+                  value={formData.permanentCity}
+                  onChange={(e) => updateFormData("permanentCity", e.target.value)}
+                  placeholder="Enter permanent city"
+                  data-testid="input-permanent-city"
+                />
+              </div>
+              <div>
+                <Label htmlFor="presentCountry">Present Country</Label>
+                <Input
+                  id="presentCountry"
+                  value={formData.presentCountry}
+                  onChange={(e) => updateFormData("presentCountry", e.target.value)}
+                  placeholder="Enter present country"
+                  data-testid="input-present-country"
+                />
+              </div>
+              <div>
+                <Label htmlFor="presentCity">Present City</Label>
+                <Input
+                  id="presentCity"
+                  value={formData.presentCity}
+                  onChange={(e) => updateFormData("presentCity", e.target.value)}
+                  placeholder="Enter present city"
+                  data-testid="input-present-city"
+                />
+              </div>
+              <div>
+                <Label htmlFor="qualification">Qualification</Label>
+                <Input
+                  id="qualification"
+                  value={formData.qualification}
+                  onChange={(e) => updateFormData("qualification", e.target.value)}
+                  placeholder="Enter qualification"
+                  data-testid="input-qualification"
+                />
+              </div>
+              <div>
+                <Label htmlFor="organization">Organization</Label>
+                <Input
+                  id="organization"
+                  value={formData.organization}
+                  onChange={(e) => updateFormData("organization", e.target.value)}
+                  placeholder="Enter organization"
+                  data-testid="input-organization"
+                />
+              </div>
+              <div>
                 <Label htmlFor="religion">Religion</Label>
                 <Select value={formData.religion} onValueChange={(value) => updateFormData("religion", value)}>
                   <SelectTrigger data-testid="select-religion">
@@ -329,6 +465,41 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div>
+                <Label htmlFor="socialTitle">Social Title</Label>
+                <Select value={formData.socialTitle} onValueChange={(value) => updateFormData("socialTitle", value)}>
+                  <SelectTrigger data-testid="select-social-title">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="mr">Mr.</SelectItem>
+                    <SelectItem value="mrs">Mrs.</SelectItem>
+                    <SelectItem value="ms">Ms.</SelectItem>
+                    <SelectItem value="dr">Dr.</SelectItem>
+                    <SelectItem value="prof">Prof.</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="profilePicture">Profile Picture URL</Label>
+                <Input
+                  id="profilePicture"
+                  value={formData.profilePicture}
+                  onChange={(e) => updateFormData("profilePicture", e.target.value)}
+                  placeholder="Enter profile picture URL"
+                  data-testid="input-profile-picture"
+                />
+              </div>
+              <div>
+                <Label htmlFor="curriculumVitae">CV/Resume URL</Label>
+                <Input
+                  id="curriculumVitae"
+                  value={formData.curriculumVitae}
+                  onChange={(e) => updateFormData("curriculumVitae", e.target.value)}
+                  placeholder="Enter CV/Resume URL"
+                  data-testid="input-curriculum-vitae"
+                />
               </div>
             </div>
 
