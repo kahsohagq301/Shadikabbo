@@ -5,6 +5,7 @@ import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { Store } from "express-session";
 import { pool } from "./db";
+import { hashPassword, isValidHashFormat, generateStrongPassword } from "./security";
 
 const PostgresSessionStore = connectPg(session);
 
@@ -129,12 +130,44 @@ export class DatabaseStorage implements IStorage {
 
   async ensureDefaultAdmin(): Promise<void> {
     const existingAdmin = await this.getUserByUsername("admin");
+    
     if (!existingAdmin) {
-      await this.createUser({
-        username: "admin",
-        password: "admin123", // This will be hashed by the auth system
-        role: "super_admin"
-      });
+      // Create new admin user
+      const adminPassword = process.env.ADMIN_PASSWORD;
+      
+      if (!adminPassword) {
+        if (process.env.NODE_ENV === 'production') {
+          throw new Error("ADMIN_PASSWORD environment variable is required in production");
+        }
+        
+        // Development: generate strong random password
+        const devPassword = generateStrongPassword();
+        console.warn("⚠️  ADMIN_PASSWORD not set in development. Generated strong password:");
+        console.log(`🔑 Admin username: admin`);
+        console.log(`🔑 Generated password: ${devPassword}`);
+        console.log("🔒 Save this password! Set ADMIN_PASSWORD env var to use a custom password.");
+        
+        await this.createUser({
+          username: "admin",
+          password: await hashPassword(devPassword),
+          role: "super_admin"
+        });
+      } else {
+        await this.createUser({
+          username: "admin",
+          password: await hashPassword(adminPassword),
+          role: "super_admin"
+        });
+        console.log("✅ Admin user created with environment password");
+      }
+    } else if (existingAdmin && !isValidHashFormat(existingAdmin.password)) {
+      // Fix existing admin user with invalid/unhashed password
+      console.warn(`⚠️  Detected invalid password format for admin user. Rehashing for security.`);
+      const hashedPassword = await hashPassword(existingAdmin.password);
+      await db.update(users)
+        .set({ password: hashedPassword })
+        .where(eq(users.id, existingAdmin.id));
+      console.log("✅ Admin password has been properly hashed.");
     }
   }
 }
