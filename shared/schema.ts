@@ -8,6 +8,12 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   role: text("role").notNull().default("cro_agent"),
+  name: text("name"),
+  profilePicture: text("profile_picture"),
+  dateOfBirth: text("date_of_birth"),
+  officialNumber: text("official_number"),
+  gender: text("gender"),
+  isEnabled: boolean("is_enabled").default(true),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -59,8 +65,22 @@ export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
   role: true,
+  name: true,
+  profilePicture: true,
+  dateOfBirth: true,
+  officialNumber: true,
+  gender: true,
+  isEnabled: true,
 }).extend({
   role: z.enum(["cro_agent", "matchmaker", "super_admin"]).default("cro_agent"),
+  gender: z.enum(["male", "female"]).optional(),
+  isEnabled: z.boolean().default(true),
+}).partial({
+  name: true,
+  profilePicture: true,
+  dateOfBirth: true,
+  officialNumber: true,
+  gender: true,
 });
 
 export const insertTrafficSchema = createInsertSchema(traffic)

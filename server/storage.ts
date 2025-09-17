@@ -150,13 +150,15 @@ export class DatabaseStorage implements IStorage {
         await this.createUser({
           username: "admin",
           password: await hashPassword(devPassword),
-          role: "super_admin"
+          role: "super_admin",
+          isEnabled: true
         });
       } else {
         await this.createUser({
           username: "admin",
           password: await hashPassword(adminPassword),
-          role: "super_admin"
+          role: "super_admin",
+          isEnabled: true
         });
         console.log("✅ Admin user created with environment password");
       }
