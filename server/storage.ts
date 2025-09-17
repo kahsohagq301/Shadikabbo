@@ -126,17 +126,6 @@ export class DatabaseStorage implements IStorage {
     const result = await db.select().from(payments);
     return result.reduce((total, payment) => total + Number(payment.paidAmount), 0);
   }
-
-  async ensureDefaultAdmin(): Promise<void> {
-    const existingAdmin = await this.getUserByUsername("admin");
-    if (!existingAdmin) {
-      await this.createUser({
-        username: "admin",
-        password: "admin123", // This will be hashed by the auth system
-        role: "super_admin"
-      });
-    }
-  }
 }
 
 export const storage = new DatabaseStorage();

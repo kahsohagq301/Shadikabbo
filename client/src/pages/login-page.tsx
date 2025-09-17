@@ -15,7 +15,7 @@ export default function LoginPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loginForm, setLoginForm] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [registerForm, setRegisterForm] = useState({
@@ -36,11 +36,11 @@ export default function LoginPage() {
     
     try {
       await loginMutation.mutateAsync({
-        username: loginForm.username,
+        username: loginForm.email,
         password: loginForm.password,
       });
     } catch (error) {
-      setLoginError("Invalid username or password. Please try again.");
+      setLoginError("Invalid email or password. Please try again.");
     }
   };
 
@@ -115,15 +115,15 @@ export default function LoginPage() {
                   <TabsContent value="login">
                     <form onSubmit={handleLogin} className="space-y-4">
                       <div>
-                        <Label htmlFor="username" className="text-gray-200">Username</Label>
+                        <Label htmlFor="email" className="text-gray-200">Email Address</Label>
                         <Input
-                          id="username"
-                          type="text"
-                          placeholder="Enter your username"
-                          value={loginForm.username}
-                          onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
+                          id="email"
+                          type="email"
+                          placeholder="Enter your email address"
+                          value={loginForm.email}
+                          onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
                           className="bg-input border-border text-foreground mt-1"
-                          data-testid="input-username"
+                          data-testid="input-email"
                           required
                         />
                       </div>
