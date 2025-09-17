@@ -13,6 +13,10 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  getAllUsers(): Promise<User[]>;
+  getUsersByRole(role: string): Promise<User[]>;
+  updateUser(id: string, user: Partial<InsertUser>): Promise<User>;
+  toggleUserStatus(id: string): Promise<User>;
   
   // Traffic methods
   getAllTraffic(): Promise<Traffic[]>;
@@ -57,6 +61,38 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .insert(users)
       .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users).orderBy(desc(users.createdAt));
+  }
+
+  async getUsersByRole(role: string): Promise<User[]> {
+    return await db.select().from(users).where(eq(users.role, role)).orderBy(desc(users.createdAt));
+  }
+
+  async updateUser(id: string, userData: Partial<InsertUser>): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set(userData as any)
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async toggleUserStatus(id: string): Promise<User> {
+    // First get current user to toggle their status
+    const currentUser = await this.getUser(id);
+    if (!currentUser) {
+      throw new Error('User not found');
+    }
+    
+    const [user] = await db
+      .update(users)
+      .set({ isEnabled: !currentUser.isEnabled })
+      .where(eq(users.id, id))
       .returning();
     return user;
   }

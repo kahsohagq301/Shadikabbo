@@ -83,6 +83,35 @@ export const insertUserSchema = createInsertSchema(users).pick({
   gender: true,
 });
 
+// Schema for safe fields that non-super admin users can update about themselves
+export const userSafeUpdateSchema = createInsertSchema(users).pick({
+  name: true,
+  profilePicture: true,
+  dateOfBirth: true,
+  officialNumber: true,
+  gender: true,
+  password: true,
+}).extend({
+  gender: z.enum(["male", "female"]).optional(),
+}).partial();
+
+// Schema for all fields that super admin can update  
+export const userAdminUpdateSchema = createInsertSchema(users).pick({
+  username: true,
+  password: true,
+  role: true,
+  name: true,
+  profilePicture: true,
+  dateOfBirth: true,
+  officialNumber: true,
+  gender: true,
+  isEnabled: true,
+}).extend({
+  role: z.enum(["cro_agent", "matchmaker", "super_admin"]),
+  gender: z.enum(["male", "female"]).optional(),
+  isEnabled: z.boolean(),
+}).partial();
+
 export const insertTrafficSchema = createInsertSchema(traffic)
   .omit({
     id: true,

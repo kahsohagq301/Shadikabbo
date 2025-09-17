@@ -33,15 +33,24 @@ export async function setupAuth(app: Express) {
       const user = await storage.getUserByUsername(username);
       if (!user || !(await comparePasswords(password, user.password))) {
         return done(null, false);
-      } else {
-        return done(null, user);
       }
+      
+      // Check if user account is enabled
+      if (!user.isEnabled) {
+        return done(null, false, { message: "Account is disabled" });
+      }
+      
+      return done(null, user);
     }),
   );
 
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id: string, done) => {
     const user = await storage.getUser(id);
+    // Check if user is still enabled during session deserialization
+    if (user && !user.isEnabled) {
+      return done(null, false);
+    }
     done(null, user);
   });
 
