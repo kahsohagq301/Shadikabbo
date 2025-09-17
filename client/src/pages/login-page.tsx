@@ -40,24 +40,27 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
-      {/* Logo - Centered at top */}
-      <div className="mb-8">
-        <img 
-          src={logoPath} 
-          alt="ShadiKabbo Logo" 
-          className="h-24 mx-auto"
-        />
-      </div>
+      {/* Logo and Welcome Text - Side by side */}
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 mb-12 max-w-6xl mx-auto">
+        {/* Logo - Left side on large screens */}
+        <div className="flex-shrink-0">
+          <img 
+            src={logoPath} 
+            alt="ShadiKabbo Logo" 
+            className="h-32 lg:h-40 mx-auto"
+          />
+        </div>
 
-      {/* Welcome Text - Centered below logo */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl lg:text-5xl font-bold mb-6">
-          <span className="text-red-600">Welcome to</span>{" "}
-          <span className="text-blue-600">ShadiKabbo</span>
-        </h1>
-        <p className="text-xl text-black max-w-2xl mx-auto leading-relaxed">
-          Professional matchmaking services connecting hearts and building lasting relationships across communities.
-        </p>
+        {/* Welcome Text - Right side on large screens */}
+        <div className="text-center lg:text-left">
+          <h1 className="text-2xl lg:text-3xl font-bold mb-4">
+            <span className="text-red-600">Welcome to</span>{" "}
+            <span className="text-blue-600">ShadiKabbo</span>
+          </h1>
+          <p className="text-base lg:text-lg text-black max-w-xl leading-relaxed">
+            Professional matchmaking services connecting hearts and building lasting relationships across communities.
+          </p>
+        </div>
       </div>
 
       {/* Login Card - Centered */}
