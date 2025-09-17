@@ -51,7 +51,7 @@ export function Sidebar() {
         <img 
           src={logoPath}
           alt="ShadiKabbo Logo" 
-          className="h-16 md:h-20 object-contain w-auto max-w-[200px]"
+          className="h-24 md:h-28 lg:h-32 object-contain w-auto max-w-[220px]"
           data-testid="img-logo"
         />
       </div>
