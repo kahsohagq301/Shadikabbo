@@ -29,6 +29,9 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function setupAuth(app: Express) {
+  // Create default admin user if it doesn't exist
+  storage.ensureDefaultAdmin().catch(console.error);
+
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET!,
     resave: false,
