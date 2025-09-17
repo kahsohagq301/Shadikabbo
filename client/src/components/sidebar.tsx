@@ -47,11 +47,11 @@ export function Sidebar() {
   return (
     <div className="w-64 bg-card border-r border-border min-h-screen flex flex-col">
       {/* Header */}
-      <div className="pl-4 pt-4 pr-4 pb-3 border-b border-border flex items-center">
+      <div className="px-4 py-6 border-b border-border flex items-center justify-center">
         <img 
           src={logoPath}
           alt="ShadiKabbo Logo" 
-          className="h-8 md:h-12 object-contain w-auto"
+          className="h-16 md:h-20 object-contain w-auto max-w-[200px]"
           data-testid="img-logo"
         />
       </div>
