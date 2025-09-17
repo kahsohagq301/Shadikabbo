@@ -54,7 +54,8 @@ export default function LoginPage() {
         {/* Welcome Text */}
         <div className="text-center lg:text-left">
           <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-4">
-            <span className="text-red-600">Welcome to ShadiKabbo</span>
+            <span className="text-red-600">Welcome to</span>{" "}
+            <span className="text-blue-600">ShadiKabbo</span>
           </h1>
           <p className="text-gray-700 text-sm md:text-base lg:text-lg max-w-md leading-relaxed mx-auto lg:mx-0">
             Professional matchmaking services connecting hearts and building lasting relationships across communities.
