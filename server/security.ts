@@ -27,14 +27,10 @@ export async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function isValidHashFormat(password: string): boolean {
-  return /^[0-9a-f]{128}\.[0-9a-f]{32}$/.test(password);
+  return /^[0-9a-f]{128}\.[0-9a-f]{32}$/i.test(password);
 }
 
 export function generateStrongPassword(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-  let password = '';
-  for (let i = 0; i < 24; i++) {
-    password += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return password;
+  // Use crypto-secure random generation
+  return randomBytes(18).toString('base64url');
 }

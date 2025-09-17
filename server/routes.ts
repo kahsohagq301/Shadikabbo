@@ -4,9 +4,9 @@ import { setupAuth } from "./auth";
 import { storage } from "./storage";
 import { insertTrafficSchema, insertPaymentSchema } from "@shared/schema";
 
-export function registerRoutes(app: Express): Server {
+export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication routes
-  setupAuth(app);
+  await setupAuth(app);
 
   // Traffic management routes
   app.get("/api/traffic", async (req, res) => {

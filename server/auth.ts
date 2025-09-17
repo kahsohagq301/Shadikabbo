@@ -12,9 +12,9 @@ declare global {
   }
 }
 
-export function setupAuth(app: Express) {
-  // Create default admin user if it doesn't exist
-  storage.ensureDefaultAdmin().catch(console.error);
+export async function setupAuth(app: Express) {
+  // Create default admin user if it doesn't exist - fail fast in production
+  await storage.ensureDefaultAdmin();
 
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET!,
