@@ -15,8 +15,8 @@ export default function LoginPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loginForm, setLoginForm] = useState({
-    email: "sohaghasunbd@gmail.com",
-    password: "Sohagq301",
+    email: "",
+    password: "",
   });
   const [registerForm, setRegisterForm] = useState({
     username: "",

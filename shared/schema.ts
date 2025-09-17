@@ -63,10 +63,14 @@ export const insertUserSchema = createInsertSchema(users).pick({
   role: z.enum(["cro_agent", "matchmaker", "super_admin"]).default("cro_agent"),
 });
 
-export const insertTrafficSchema = createInsertSchema(traffic).omit({
-  id: true,
-  createdAt: true,
-});
+export const insertTrafficSchema = createInsertSchema(traffic)
+  .omit({
+    id: true,
+    createdAt: true,
+  })
+  .extend({
+    candidatePictures: z.array(z.string()).default([]),
+  });
 
 export const insertPaymentSchema = createInsertSchema(payments).omit({
   id: true,

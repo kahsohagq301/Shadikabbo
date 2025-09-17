@@ -70,9 +70,18 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createTraffic(trafficData: InsertTraffic): Promise<Traffic> {
+    const candidatePictures = Array.isArray(trafficData.candidatePictures)
+      ? [...trafficData.candidatePictures].filter((x): x is string => typeof x === 'string')
+      : [];
+
+    const payload: typeof traffic.$inferInsert = {
+      ...trafficData,
+      candidatePictures,
+    };
+
     const [trafficRecord] = await db
       .insert(traffic)
-      .values([trafficData])
+      .values([payload])
       .returning();
     return trafficRecord;
   }
