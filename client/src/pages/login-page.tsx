@@ -5,23 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Eye, EyeOff, Loader2, LogIn, UserPlus } from "lucide-react";
+import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
 import logoPath from "@assets/Logo png_1758087604918.png";
 
 export default function LoginPage() {
-  const { user, loginMutation, registerMutation } = useAuth();
+  const { user, loginMutation } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loginForm, setLoginForm] = useState({
     username: "",
     password: "",
-  });
-  const [registerForm, setRegisterForm] = useState({
-    username: "",
-    password: "",
-    role: "cro_agent" as "cro_agent" | "matchmaker" | "super_admin",
   });
   const [loginError, setLoginError] = useState<string>("");
 
@@ -44,200 +37,119 @@ export default function LoginPage() {
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      await registerMutation.mutateAsync(registerForm);
-    } catch (error) {
-      console.error("Registration failed:", error);
-    }
-  };
 
   return (
-    <div className="min-h-screen gradient-bg flex items-center justify-center relative overflow-hidden">
-      {/* Animated particles background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-ping"></div>
-        <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-blue-400/30 rounded-full animate-pulse"></div>
-        <div className="absolute top-1/2 right-1/3 w-3 h-3 bg-red-400/20 rounded-full animate-bounce"></div>
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
+      {/* Logo - Centered at top */}
+      <div className="mb-8">
+        <img 
+          src={logoPath} 
+          alt="ShadiKabbo Logo" 
+          className="h-24 mx-auto"
+        />
       </div>
-      
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen gap-8">
-          
-          {/* Left Side - Company Info */}
-          <div className="lg:w-1/2 text-center lg:text-left">
-            <div className="mb-8">
-              <img 
-                src={logoPath} 
-                alt="ShadiKabbo Logo" 
-                className="h-20 mx-auto lg:mx-0 mb-6"
-              />
-            </div>
-            <h1 className="text-4xl lg:text-5xl font-bold mb-6 text-white">
-              Welcome to <span className="text-blue-400">ShadiKabbo</span>
-            </h1>
-            <p className="text-xl text-gray-200 max-w-md mx-auto lg:mx-0">
-              Professional matchmaking services connecting hearts and building lasting relationships across communities.
+
+      {/* Welcome Text - Centered below logo */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+          <span className="text-red-600">Welcome to</span>{" "}
+          <span className="text-blue-600">ShadiKabbo</span>
+        </h1>
+        <p className="text-xl text-black max-w-2xl mx-auto leading-relaxed">
+          Professional matchmaking services connecting hearts and building lasting relationships across communities.
+        </p>
+      </div>
+
+      {/* Login Card - Centered */}
+      <div className="w-full max-w-md">
+        <Card className="shadow-2xl border border-gray-200 bg-white">
+          <CardHeader className="text-center pb-6">
+            <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+              Access Portal
+            </CardTitle>
+            <p className="text-gray-600 text-sm">
+              CRO Agent • Matchmaker • Super Admin
             </p>
-          </div>
+          </CardHeader>
+          
+          <CardContent className="px-8 pb-8">
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <Label htmlFor="username" className="text-gray-700 font-medium">
+                  Username
+                </Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={loginForm.username}
+                  onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
+                  className="mt-2 border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 bg-white"
+                  data-testid="input-username"
+                  required
+                />
+              </div>
 
-          {/* Right Side - Auth Forms */}
-          <div className="lg:w-1/2 w-full max-w-md">
-            <Card className="glass-effect login-card border-white/10">
-              <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold text-foreground mb-2">
-                  Access Portal
-                </CardTitle>
-                <p className="text-muted-foreground">CRO Agent • Matchmaker • Super Admin</p>
-              </CardHeader>
-              
-              <CardContent>
-                <Tabs defaultValue="login" className="space-y-6">
-                  <TabsList className="grid w-full grid-cols-2 bg-muted">
-                    <TabsTrigger 
-                      value="login" 
-                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                      data-testid="tab-login"
-                    >
-                      Login
-                    </TabsTrigger>
-                    <TabsTrigger 
-                      value="register" 
-                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                      data-testid="tab-register"
-                    >
-                      Register
-                    </TabsTrigger>
-                  </TabsList>
+              <div>
+                <Label htmlFor="password" className="text-gray-700 font-medium">
+                  Password
+                </Label>
+                <div className="relative mt-2">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={loginForm.password}
+                    onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 bg-white pr-10"
+                    data-testid="input-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                    data-testid="button-toggle-password"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
 
-                  <TabsContent value="login">
-                    <form onSubmit={handleLogin} className="space-y-4">
-                      <div>
-                        <Label htmlFor="username" className="text-gray-200">Username</Label>
-                        <Input
-                          id="username"
-                          type="text"
-                          placeholder="Enter your username"
-                          value={loginForm.username}
-                          onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
-                          className="bg-input border-border text-foreground mt-1"
-                          data-testid="input-username"
-                          required
-                        />
-                      </div>
+              {loginError && (
+                <Alert variant="destructive" data-testid="alert-login-error" className="border-red-200 bg-red-50">
+                  <AlertDescription className="text-red-700">{loginError}</AlertDescription>
+                </Alert>
+              )}
 
-                      <div>
-                        <Label htmlFor="password" className="text-gray-200">Password</Label>
-                        <div className="relative mt-1">
-                          <Input
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Enter your password"
-                            value={loginForm.password}
-                            onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                            className="bg-input border-border text-foreground pr-10"
-                            data-testid="input-password"
-                            required
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                            data-testid="button-toggle-password"
-                          >
-                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          </button>
-                        </div>
-                      </div>
+              <Button 
+                type="submit" 
+                className="premium-login-btn w-full py-3 text-white font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg" 
+                disabled={loginMutation.isPending}
+                data-testid="button-login"
+              >
+                {loginMutation.isPending ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                    Signing In...
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="h-5 w-5 mr-2" />
+                    Sign In to Dashboard
+                  </>
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
 
-                      {loginError && (
-                        <Alert variant="destructive" data-testid="alert-login-error">
-                          <AlertDescription>{loginError}</AlertDescription>
-                        </Alert>
-                      )}
-
-                      <Button 
-                        type="submit" 
-                        className="w-full btn-primary text-white font-semibold" 
-                        disabled={loginMutation.isPending}
-                        data-testid="button-login"
-                      >
-                        {loginMutation.isPending ? (
-                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        ) : (
-                          <LogIn className="h-4 w-4 mr-2" />
-                        )}
-                        Sign In to Dashboard
-                      </Button>
-                    </form>
-                  </TabsContent>
-
-                  <TabsContent value="register">
-                    <form onSubmit={handleRegister} className="space-y-4">
-                      <div>
-                        <Label htmlFor="reg-username" className="text-muted-foreground">Username</Label>
-                        <Input
-                          id="reg-username"
-                          type="text"
-                          placeholder="Enter username"
-                          value={registerForm.username}
-                          onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
-                          className="bg-input border-border text-foreground mt-1"
-                          data-testid="input-register-username"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <Label htmlFor="reg-password" className="text-muted-foreground">Password</Label>
-                        <Input
-                          id="reg-password"
-                          type="password"
-                          placeholder="Enter password"
-                          value={registerForm.password}
-                          onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-                          className="bg-input border-border text-foreground mt-1"
-                          data-testid="input-register-password"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <Label htmlFor="reg-role" className="text-muted-foreground">Role</Label>
-                        <Select value={registerForm.role} onValueChange={(value: "cro_agent" | "matchmaker" | "super_admin") => setRegisterForm({ ...registerForm, role: value })}>
-                          <SelectTrigger className="bg-input border-border text-foreground mt-1" data-testid="select-register-role">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="cro_agent">CRO Agent</SelectItem>
-                            <SelectItem value="matchmaker">Matchmaker</SelectItem>
-                            <SelectItem value="super_admin">Super Admin</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <Button 
-                        type="submit" 
-                        className="w-full btn-primary text-white font-semibold" 
-                        disabled={registerMutation.isPending}
-                        data-testid="button-register"
-                      >
-                        {registerMutation.isPending ? (
-                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        ) : (
-                          <UserPlus className="h-4 w-4 mr-2" />
-                        )}
-                        Create Account
-                      </Button>
-                    </form>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+      {/* Footer Info */}
+      <div className="mt-12 text-center">
+        <p className="text-gray-500 text-sm">
+          New accounts are created by administrators for security purposes.
+        </p>
       </div>
     </div>
   );

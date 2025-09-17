@@ -133,6 +133,67 @@
   .pulse-dot {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+
+  /* Premium Login Button with Red-Blue Animation */
+  .premium-login-btn {
+    background: linear-gradient(135deg, #DC2626 0%, #2563EB 100%);
+    background-size: 200% 200%;
+    border: none;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: gradientShift 3s ease-in-out infinite alternate;
+    box-shadow: 
+      0 4px 15px 0 rgba(220, 38, 38, 0.3),
+      0 4px 15px 0 rgba(37, 99, 235, 0.3);
+  }
+
+  .premium-login-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s;
+  }
+
+  .premium-login-btn:hover {
+    background: linear-gradient(135deg, #B91C1C 0%, #1D4ED8 100%);
+    background-size: 200% 200%;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+      0 8px 25px 0 rgba(220, 38, 38, 0.4),
+      0 8px 25px 0 rgba(37, 99, 235, 0.4);
+    animation: gradientShiftHover 2s ease-in-out infinite alternate;
+  }
+
+  .premium-login-btn:hover:before {
+    left: 100%;
+  }
+
+  .premium-login-btn:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 
+      0 4px 15px 0 rgba(220, 38, 38, 0.6),
+      0 4px 15px 0 rgba(37, 99, 235, 0.6);
+  }
+
+  .premium-login-btn:disabled {
+    background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    animation: none;
+  }
+
+  .premium-login-btn:disabled:hover {
+    transform: none;
+    background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  }
 }
 
 @keyframes gradient {
@@ -145,4 +206,34 @@
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
   20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes gradientShift {
+  0% { 
+    background-position: 0% 50%; 
+    background: linear-gradient(135deg, #DC2626 0%, #2563EB 100%);
+  }
+  50% { 
+    background-position: 100% 50%; 
+    background: linear-gradient(135deg, #EF4444 0%, #3B82F6 100%);
+  }
+  100% { 
+    background-position: 0% 50%; 
+    background: linear-gradient(135deg, #DC2626 0%, #2563EB 100%);
+  }
+}
+
+@keyframes gradientShiftHover {
+  0% { 
+    background-position: 0% 50%; 
+    background: linear-gradient(135deg, #B91C1C 0%, #1D4ED8 100%);
+  }
+  50% { 
+    background-position: 100% 50%; 
+    background: linear-gradient(135deg, #DC2626 0%, #2563EB 100%);
+  }
+  100% { 
+    background-position: 0% 50%; 
+    background: linear-gradient(135deg, #B91C1C 0%, #1D4ED8 100%);
+  }
 }
