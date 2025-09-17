@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import logoPath from "@assets/Logo png_1758087604918.png";
+import logoPath from "@assets/Logo png_1758104778985.png";
 import { 
   LayoutDashboard, 
   Users, 
@@ -47,11 +47,11 @@ export function Sidebar() {
   return (
     <div className="w-64 bg-card border-r border-border min-h-screen flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-border flex items-center justify-between">
+      <div className="pl-4 pt-4 pr-4 pb-3 border-b border-border flex items-center">
         <img 
           src={logoPath}
           alt="ShadiKabbo Logo" 
-          className="h-10 object-contain"
+          className="h-8 md:h-12 object-contain w-auto"
           data-testid="img-logo"
         />
       </div>
