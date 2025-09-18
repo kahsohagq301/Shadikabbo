@@ -91,7 +91,7 @@ export function Sidebar() {
             key={path} 
             href={path}
             className={cn(
-              "flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 cursor-pointer block",
+              "flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer block",
               location === path
                 ? "bg-gradient-to-r from-blue-50 to-red-50 text-gray-900 font-semibold border-l-4 border-blue-600"
                 : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -104,7 +104,7 @@ export function Sidebar() {
                 ? "text-blue-600" 
                 : "text-gray-600"
             )} />
-            <span className="text-sm font-normal">{label}</span>
+            <span className="text-xs font-normal leading-none">{label}</span>
           </Link>
         ))}
       </nav>
