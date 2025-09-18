@@ -4,37 +4,37 @@
 
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(222, 84%, 4%);
+  --foreground: hsl(232, 51%, 23%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(222, 84%, 4%);
+  --card-foreground: hsl(232, 51%, 23%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(222, 84%, 4%);
-  --primary: hsl(221, 83%, 53%);
+  --popover-foreground: hsl(232, 51%, 23%);
+  --primary: hsl(232, 51%, 36%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(0, 84%, 60%);
+  --secondary: hsl(0, 74%, 42%);
   --secondary-foreground: hsl(0, 0%, 100%);
   --muted: hsl(210, 40%, 96%);
   --muted-foreground: hsl(215, 16%, 47%);
-  --accent: hsl(0, 84%, 60%);
+  --accent: hsl(0, 74%, 42%);
   --accent-foreground: hsl(0, 0%, 100%);
-  --destructive: hsl(0, 84%, 60%);
+  --destructive: hsl(0, 74%, 42%);
   --destructive-foreground: hsl(0, 0%, 100%);
   --border: hsl(214, 32%, 91%);
   --input: hsl(0, 0%, 100%);
-  --ring: hsl(221, 83%, 53%);
-  --chart-1: hsl(221, 83%, 53%);
-  --chart-2: hsl(159, 100%, 36%);
+  --ring: hsl(232, 51%, 36%);
+  --chart-1: hsl(232, 51%, 36%);
+  --chart-2: hsl(0, 74%, 42%);
   --chart-3: hsl(42, 93%, 56%);
   --chart-4: hsl(147, 79%, 42%);
   --chart-5: hsl(341, 75%, 51%);
   --sidebar: hsl(0, 0%, 100%);
-  --sidebar-foreground: hsl(222, 84%, 4%);
-  --sidebar-primary: hsl(221, 83%, 53%);
+  --sidebar-foreground: hsl(232, 51%, 23%);
+  --sidebar-primary: hsl(232, 51%, 36%);
   --sidebar-primary-foreground: hsl(0, 0%, 100%);
   --sidebar-accent: hsl(210, 40%, 96%);
-  --sidebar-accent-foreground: hsl(221, 83%, 53%);
+  --sidebar-accent-foreground: hsl(232, 51%, 36%);
   --sidebar-border: hsl(214, 32%, 91%);
-  --sidebar-ring: hsl(221, 83%, 53%);
+  --sidebar-ring: hsl(232, 51%, 36%);
   --font-sans: "Inter", sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
@@ -95,33 +95,33 @@
   }
 
   .sidebar-link:hover {
-    background: hsl(221, 83%, 53%, 0.1);
-    border-left: 3px solid hsl(221, 83%, 53%);
+    background: hsl(232, 51%, 36%, 0.1);
+    border-left: 3px solid hsl(232, 51%, 36%);
   }
 
   .sidebar-link.active {
-    background: hsl(221, 83%, 53%, 0.15);
-    border-left: 3px solid hsl(221, 83%, 53%);
+    background: hsl(232, 51%, 36%, 0.15);
+    border-left: 3px solid hsl(232, 51%, 36%);
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+    background: linear-gradient(135deg, hsl(232, 51%, 36%), hsl(232, 51%, 28%));
     transition: all 0.3s ease;
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, #2563EB, #1E3A8A);
+    background: linear-gradient(135deg, hsl(232, 51%, 28%), hsl(232, 51%, 20%));
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 20px rgba(45, 58, 135, 0.3);
   }
 
   .btn-secondary {
-    background: linear-gradient(135deg, #DC2626, #B91C1C);
+    background: linear-gradient(135deg, hsl(0, 74%, 42%), hsl(0, 74%, 36%));
     transition: all 0.3s ease;
   }
 
   .btn-secondary:hover {
-    background: linear-gradient(135deg, #B91C1C, #991B1B);
+    background: linear-gradient(135deg, hsl(0, 74%, 36%), hsl(0, 74%, 28%));
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
   }
@@ -136,7 +136,7 @@
 
   /* Premium Login Button with Red-Blue Animation */
   .premium-login-btn {
-    background: linear-gradient(135deg, #DC2626 0%, #2563EB 100%);
+    background: linear-gradient(135deg, hsl(0, 74%, 42%) 0%, hsl(232, 51%, 36%) 100%);
     background-size: 200% 200%;
     border: none;
     border-radius: 12px;
@@ -146,7 +146,7 @@
     animation: gradientShift 3s ease-in-out infinite alternate;
     box-shadow: 
       0 4px 15px 0 rgba(220, 38, 38, 0.3),
-      0 4px 15px 0 rgba(37, 99, 235, 0.3);
+      0 4px 15px 0 rgba(45, 58, 135, 0.3);
   }
 
   .premium-login-btn:before {
@@ -161,12 +161,12 @@
   }
 
   .premium-login-btn:hover {
-    background: linear-gradient(135deg, #B91C1C 0%, #1D4ED8 100%);
+    background: linear-gradient(135deg, hsl(0, 74%, 36%) 0%, hsl(232, 51%, 28%) 100%);
     background-size: 200% 200%;
     transform: translateY(-3px) scale(1.02);
     box-shadow: 
       0 8px 25px 0 rgba(220, 38, 38, 0.4),
-      0 8px 25px 0 rgba(37, 99, 235, 0.4);
+      0 8px 25px 0 rgba(45, 58, 135, 0.4);
     animation: gradientShiftHover 2s ease-in-out infinite alternate;
   }
 
@@ -211,29 +211,29 @@
 @keyframes gradientShift {
   0% { 
     background-position: 0% 50%; 
-    background: linear-gradient(135deg, #DC2626 0%, #2563EB 100%);
+    background: linear-gradient(135deg, hsl(0, 74%, 42%) 0%, hsl(232, 51%, 36%) 100%);
   }
   50% { 
     background-position: 100% 50%; 
-    background: linear-gradient(135deg, #EF4444 0%, #3B82F6 100%);
+    background: linear-gradient(135deg, hsl(0, 74%, 50%) 0%, hsl(232, 51%, 44%) 100%);
   }
   100% { 
     background-position: 0% 50%; 
-    background: linear-gradient(135deg, #DC2626 0%, #2563EB 100%);
+    background: linear-gradient(135deg, hsl(0, 74%, 42%) 0%, hsl(232, 51%, 36%) 100%);
   }
 }
 
 @keyframes gradientShiftHover {
   0% { 
     background-position: 0% 50%; 
-    background: linear-gradient(135deg, #B91C1C 0%, #1D4ED8 100%);
+    background: linear-gradient(135deg, hsl(0, 74%, 36%) 0%, hsl(232, 51%, 28%) 100%);
   }
   50% { 
     background-position: 100% 50%; 
-    background: linear-gradient(135deg, #DC2626 0%, #2563EB 100%);
+    background: linear-gradient(135deg, hsl(0, 74%, 42%) 0%, hsl(232, 51%, 36%) 100%);
   }
   100% { 
     background-position: 0% 50%; 
-    background: linear-gradient(135deg, #B91C1C 0%, #1D4ED8 100%);
+    background: linear-gradient(135deg, hsl(0, 74%, 36%) 0%, hsl(232, 51%, 28%) 100%);
   }
 }

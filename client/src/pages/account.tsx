@@ -18,6 +18,7 @@ import { insertUserSchema } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Eye, Edit, Plus, Users } from "lucide-react";
 import { format } from "date-fns";
+import { AppLayout } from "@/components/app-layout";
 
 // Role options for filtering and selection
 const roleOptions = [
@@ -192,8 +193,9 @@ export default function Account() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <AppLayout>
+      <div className="p-6 space-y-6">
+        <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground" data-testid="text-page-title">
             Account Management
@@ -514,7 +516,7 @@ export default function Account() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} data-testid="input-edit-name" />
+                      <Input {...field} value={field.value ?? ''} data-testid="input-edit-name" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -527,7 +529,7 @@ export default function Account() {
                   <FormItem>
                     <FormLabel>Contact Number</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} data-testid="input-edit-contact" />
+                      <Input {...field} value={field.value ?? ''} data-testid="input-edit-contact" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -540,7 +542,7 @@ export default function Account() {
                   <FormItem>
                     <FormLabel>Date of Birth</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} value={field.value || ''} data-testid="input-edit-dob" />
+                      <Input type="date" {...field} value={field.value ?? ''} data-testid="input-edit-dob" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -576,6 +578,7 @@ export default function Account() {
           </Form>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </AppLayout>
   );
 }

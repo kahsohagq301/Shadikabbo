@@ -1,8 +1,8 @@
-import { Sidebar } from "@/components/sidebar";
 import { DashboardStats } from "@/components/dashboard-stats";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { AppLayout } from "@/components/app-layout";
 
 interface DashboardStatsData {
   trafficCount: number;
@@ -62,11 +62,8 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <Sidebar />
-      
-      <main className="flex-1">
-        <div className="p-6">
+    <AppLayout>
+      <div className="p-6">
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-foreground mb-2" data-testid="text-dashboard-title">
               Dashboard
@@ -139,7 +136,6 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
-      </main>
-    </div>
+    </AppLayout>
   );
 }
