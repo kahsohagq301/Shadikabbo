@@ -45,30 +45,30 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-64 bg-card border-r border-border min-h-screen flex flex-col shadow-lg">
+    <div className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col shadow-md">
       {/* Header */}
-      <div className="px-4 py-8 border-b border-border flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5">
+      <div className="pl-4 pt-4 pb-3 border-b border-gray-200">
         <img 
           src={logoPath}
           alt="ShadiKabbo Logo" 
-          className="h-20 md:h-24 lg:h-28 object-contain w-auto max-w-[200px] drop-shadow-sm"
+          className="h-16 object-contain w-auto max-w-[180px]"
           data-testid="img-logo"
         />
       </div>
 
       {/* User Profile */}
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-3 shadow-sm">
-          <Avatar className="w-10 h-10 ring-2 ring-primary/20">
-            <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-sm font-bold">
+      <div className="p-4 border-b border-gray-200">
+        <div className="flex items-center bg-gray-50 rounded-lg p-3">
+          <Avatar className="w-9 h-9">
+            <AvatarFallback className="bg-gradient-to-br from-blue-600 to-red-600 text-white text-sm font-semibold">
               SA
             </AvatarFallback>
           </Avatar>
           <div className="px-3 flex-1 min-w-0">
-            <div className="text-sm font-semibold text-foreground truncate" data-testid="text-username">
+            <div className="text-sm font-semibold text-gray-800 truncate" data-testid="text-username">
               {user?.username}
             </div>
-            <div className="text-xs text-secondary font-medium" data-testid="text-user-role">
+            <div className="text-xs text-gray-600 font-medium" data-testid="text-user-role">
               {getRoleDisplayName(user?.role)}
             </div>
           </div>
@@ -76,7 +76,7 @@ export function Sidebar() {
             variant="ghost" 
             size="sm" 
             onClick={() => logoutMutation.mutate()}
-            className="text-muted-foreground hover:text-secondary hover:bg-secondary/10 p-2 rounded-lg transition-all duration-200"
+            className="text-gray-500 hover:text-red-600 hover:bg-red-50 p-2 rounded-md transition-colors duration-200"
             data-testid="button-logout"
           >
             <LogOut className="h-4 w-4" />
@@ -90,23 +90,20 @@ export function Sidebar() {
           <Link key={path} href={path}>
             <a
               className={cn(
-                "sidebar-link flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group relative overflow-hidden",
+                "flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 cursor-pointer block",
                 location === path
-                  ? "active text-white bg-gradient-to-r from-primary to-secondary shadow-lg scale-105 font-semibold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10 hover:shadow-md hover:scale-[1.02]"
+                  ? "bg-gradient-to-r from-blue-50 to-red-50 text-gray-900 font-semibold border-l-4 border-blue-600"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
               )}
               data-testid={`link-${label.toLowerCase().replace(' ', '-')}`}
             >
               <Icon className={cn(
-                "h-5 w-5 transition-all duration-200",
+                "h-5 w-5 transition-colors duration-200",
                 location === path 
-                  ? "text-white" 
-                  : "text-muted-foreground group-hover:text-primary"
+                  ? "text-blue-600" 
+                  : "text-gray-600"
               )} />
               <span className="font-medium">{label}</span>
-              {location === path && (
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full opacity-80"></div>
-              )}
             </a>
           </Link>
         ))}
