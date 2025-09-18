@@ -197,10 +197,10 @@ export default function Account() {
       <div className="p-6 space-y-6">
         <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground" data-testid="text-page-title">
+          <h1 className="text-4xl font-bold text-foreground mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" data-testid="text-page-title">
             Account Management
           </h1>
-          <p className="text-muted-foreground" data-testid="text-page-description">
+          <p className="text-lg text-muted-foreground font-medium" data-testid="text-page-description">
             {isSuperAdmin ? "Manage all user accounts and permissions" : "View and manage your account information"}
           </p>
         </div>

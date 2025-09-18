@@ -64,11 +64,11 @@ export default function Dashboard() {
   return (
     <AppLayout>
       <div className="p-6">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-foreground mb-2" data-testid="text-dashboard-title">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-foreground mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" data-testid="text-dashboard-title">
               Dashboard
             </h1>
-            <p className="text-muted-foreground" data-testid="text-dashboard-subtitle">
+            <p className="text-lg text-muted-foreground font-medium" data-testid="text-dashboard-subtitle">
               Welcome back! Here's what's happening with your matchmaking business today.
             </p>
           </div>
@@ -76,15 +76,15 @@ export default function Dashboard() {
           <DashboardStats stats={stats} isLoading={statsLoading} />
 
           {/* Recent Activity Table */}
-          <Card className="border-border">
-            <CardHeader className="border-b border-border">
+          <Card className="border-border shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <CardHeader className="border-b border-border bg-gradient-to-r from-primary/5 to-secondary/5">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl font-semibold text-foreground" data-testid="text-recent-activity">
+                <CardTitle className="text-2xl font-bold text-foreground" data-testid="text-recent-activity">
                   Recent Activity
                 </CardTitle>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 bg-green-50 px-3 py-1 rounded-full">
                   <span className="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
-                  <span className="text-sm text-muted-foreground" data-testid="text-live-updating">
+                  <span className="text-sm text-green-700 font-medium" data-testid="text-live-updating">
                     Live updating
                   </span>
                 </div>
