@@ -47,11 +47,11 @@ export function Sidebar() {
   return (
     <div className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col shadow-md">
       {/* Header */}
-      <div className="pl-4 pt-4 pb-3 border-b border-gray-200">
+      <div className="px-4 py-5 border-b border-gray-200 flex items-center justify-center">
         <img 
           src={logoPath}
           alt="ShadiKabbo Logo" 
-          className="h-16 object-contain w-auto max-w-[180px]"
+          className="h-20 object-contain w-auto max-w-[200px]"
           data-testid="img-logo"
         />
       </div>
@@ -87,24 +87,24 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="p-4 space-y-1 flex-1">
         {navItems.map(({ path, label, icon: Icon }) => (
-          <Link key={path} href={path}>
-            <a
-              className={cn(
-                "flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 cursor-pointer block",
-                location === path
-                  ? "bg-gradient-to-r from-blue-50 to-red-50 text-gray-900 font-semibold border-l-4 border-blue-600"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              )}
-              data-testid={`link-${label.toLowerCase().replace(' ', '-')}`}
-            >
-              <Icon className={cn(
-                "h-5 w-5 transition-colors duration-200",
-                location === path 
-                  ? "text-blue-600" 
-                  : "text-gray-600"
-              )} />
-              <span className="font-medium">{label}</span>
-            </a>
+          <Link 
+            key={path} 
+            href={path}
+            className={cn(
+              "flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 cursor-pointer block",
+              location === path
+                ? "bg-gradient-to-r from-blue-50 to-red-50 text-gray-900 font-semibold border-l-4 border-blue-600"
+                : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            )}
+            data-testid={`link-${label.toLowerCase().replace(' ', '-')}`}
+          >
+            <Icon className={cn(
+              "h-5 w-5 transition-colors duration-200",
+              location === path 
+                ? "text-blue-600" 
+                : "text-gray-600"
+            )} />
+            <span className="font-medium">{label}</span>
           </Link>
         ))}
       </nav>
