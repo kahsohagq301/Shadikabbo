@@ -99,12 +99,12 @@ export function Sidebar() {
             data-testid={`link-${label.toLowerCase().replace(' ', '-')}`}
           >
             <Icon className={cn(
-              "h-5 w-5 transition-colors duration-200",
+              "h-4 w-4 transition-colors duration-200 flex-shrink-0",
               location === path 
                 ? "text-blue-600" 
                 : "text-gray-600"
             )} />
-            <span className="font-medium">{label}</span>
+            <span className="text-sm font-normal">{label}</span>
           </Link>
         ))}
       </nav>
