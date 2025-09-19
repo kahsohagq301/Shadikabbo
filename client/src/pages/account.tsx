@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { insertUserSchema } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Eye, Edit, Plus, Users } from "lucide-react";
+import { Eye, Edit, Plus, Users, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { AppLayout } from "@/components/app-layout";
 
@@ -44,7 +44,9 @@ export default function Account() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<any>(null);
+  const [accountToDelete, setAccountToDelete] = useState<any>(null);
 
   // Determine if user is super admin
   const isSuperAdmin = user?.role === 'super_admin';
@@ -171,6 +173,30 @@ export default function Account() {
     },
   });
 
+  // Delete account mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (accountId: string) => {
+      const response = await fetch(`/api/accounts/${accountId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete account');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/accounts'] });
+      setIsDeleteDialogOpen(false);
+      setAccountToDelete(null);
+      toast({ title: "Success", description: "Account deleted successfully!" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Error", description: error.message || "Failed to delete account", variant: "destructive" });
+    },
+  });
+
   const handleViewAccount = (account: any) => {
     setSelectedAccount(account);
     setIsViewDialogOpen(true);
@@ -184,6 +210,17 @@ export default function Account() {
 
   const handleToggleStatus = (accountId: string) => {
     toggleMutation.mutate(accountId);
+  };
+
+  const handleDeleteAccount = (account: any) => {
+    setAccountToDelete(account);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDeleteAccount = () => {
+    if (accountToDelete) {
+      deleteMutation.mutate(accountToDelete.id);
+    }
   };
 
   const getRoleDisplayName = (role: string) => {
@@ -464,12 +501,23 @@ export default function Account() {
                             <Edit className="h-4 w-4" />
                           </Button>
                           {isSuperAdmin && account.id !== user?.id && (
-                            <Switch 
-                              checked={account.isEnabled}
-                              onCheckedChange={() => handleToggleStatus(account.id)}
-                              disabled={toggleMutation.isPending}
-                              data-testid={`switch-status-${account.id}`}
-                            />
+                            <>
+                              <Switch 
+                                checked={account.isEnabled}
+                                onCheckedChange={() => handleToggleStatus(account.id)}
+                                disabled={toggleMutation.isPending}
+                                data-testid={`switch-status-${account.id}`}
+                              />
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => handleDeleteAccount(account)} 
+                                data-testid={`button-delete-${account.id}`}
+                                className="text-destructive hover:text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </>
                           )}
                         </div>
                       </td>
