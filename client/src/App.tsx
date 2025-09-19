@@ -10,6 +10,7 @@ import Dashboard from "@/pages/dashboard";
 import Traffic from "@/pages/traffic";
 import Account from "@/pages/account";
 import Payment from "@/pages/payment";
+import PaidClients from "@/pages/paid-clients";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -17,8 +18,9 @@ function Router() {
     <Switch>
       <ProtectedRoute path="/" component={Dashboard} />
       <ProtectedRoute path="/traffic" component={Traffic} />
-      <ProtectedRoute path="/account" component={Account} />
       <ProtectedRoute path="/payment" component={Payment} />
+      <ProtectedRoute path="/paid-clients" component={PaidClients} />
+      <ProtectedRoute path="/account" component={Account} />
       <Route path="/auth" component={LoginPage} />
       <Route component={NotFound} />
     </Switch>

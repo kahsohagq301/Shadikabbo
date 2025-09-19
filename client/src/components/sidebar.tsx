@@ -23,7 +23,7 @@ const navItems = [
   { path: "/account", label: "Account", icon: UserCircle },
   { path: "/payment", label: "Payment", icon: DollarSign },
   { path: "/tracking", label: "Tracking", icon: MapPin },
-  { path: "/paid-client", label: "Paid Client", icon: CreditCard },
+  { path: "/paid-clients", label: "Paid Clients", icon: CreditCard },
   { path: "/success-story", label: "Success Story", icon: Heart },
   { path: "/hrm", label: "HRM", icon: UsersRound },
   { path: "/settings", label: "Settings", icon: Settings },
