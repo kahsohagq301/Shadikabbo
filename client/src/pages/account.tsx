@@ -67,7 +67,14 @@ export default function Account() {
   const createForm = useForm<CreateAccountForm>({
     resolver: zodResolver(createAccountSchema),
     defaultValues: {
+      name: "",
+      username: "",
+      officialNumber: "",
       role: "cro_agent",
+      dateOfBirth: "",
+      gender: "",
+      password: "",
+      confirmPassword: "",
       isEnabled: true,
     },
   });
@@ -273,7 +280,7 @@ export default function Account() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Account Role</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={field.onChange} value={field.value ?? ""}>
                             <FormControl>
                               <SelectTrigger data-testid="select-create-role">
                                 <SelectValue placeholder="Select role" />
@@ -312,7 +319,7 @@ export default function Account() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Gender</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={field.onChange} value={field.value ?? ""}>
                             <FormControl>
                               <SelectTrigger data-testid="select-create-gender">
                                 <SelectValue placeholder="Select gender" />
