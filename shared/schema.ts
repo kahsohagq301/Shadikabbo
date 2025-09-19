@@ -145,3 +145,11 @@ export type UpdatePaymentStatus = z.infer<typeof updatePaymentStatusSchema>;
 export interface PaymentRequest extends Payment {
   trafficName: string;
 }
+
+export interface PaidClientWithPayment extends Traffic {
+  paymentDate: string;
+  paymentId: string;
+  packageType: string;
+  paidAmount: string;
+  paymentMethod: string;
+}

@@ -1,6 +1,6 @@
-import { users, traffic, payments, type User, type InsertUser, type Traffic, type InsertTraffic, type Payment, type InsertPayment, type PaymentRequest, type UpdatePaymentStatus } from "@shared/schema";
+import { users, traffic, payments, type User, type InsertUser, type Traffic, type InsertTraffic, type Payment, type InsertPayment, type PaymentRequest, type UpdatePaymentStatus, type PaidClientWithPayment } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, count, sql } from "drizzle-orm";
+import { eq, desc, count, sql, and, or, ilike, asc } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { Store } from "express-session";
@@ -32,6 +32,38 @@ export interface IStorage {
   getPendingPayments(): Promise<PaymentRequest[]>;
   updatePaymentStatus(id: string, status: UpdatePaymentStatus): Promise<Payment>;
   getPaymentById(id: string): Promise<Payment | undefined>;
+  
+  // Paid Clients methods
+  getPaidClients(params: {
+    page?: number;
+    pageSize?: number;
+    gender?: string;
+    birthYear?: string;
+    age?: string;
+    height?: string;
+    maritalStatus?: string;
+    qualification?: string;
+    profession?: string;
+    permanentCountry?: string;
+    permanentCity?: string;
+    presentCountry?: string;
+    presentCity?: string;
+    q?: string;
+  }, currentUser: User): Promise<PaidClientWithPayment[]>;
+  getPaidClientsCount(params: {
+    gender?: string;
+    birthYear?: string;
+    age?: string;
+    height?: string;
+    maritalStatus?: string;
+    qualification?: string;
+    profession?: string;
+    permanentCountry?: string;
+    permanentCity?: string;
+    presentCountry?: string;
+    presentCity?: string;
+    q?: string;
+  }, currentUser: User): Promise<number>;
   
   // Statistics
   getTrafficCount(): Promise<number>;
@@ -218,6 +250,14 @@ export class DatabaseStorage implements IStorage {
       throw new Error(`Payment status is already ${existingPayment.status}`);
     }
 
+    // If payment is accepted, update the corresponding traffic status to 'paid'
+    if (statusData.status === 'accepted' && payment.trafficId) {
+      await db
+        .update(traffic)
+        .set({ status: 'paid' })
+        .where(eq(traffic.id, payment.trafficId));
+    }
+
     return payment;
   }
 
@@ -226,9 +266,183 @@ export class DatabaseStorage implements IStorage {
     return result.count;
   }
 
-  async getPaidClientsCount(): Promise<number> {
-    const [result] = await db.select({ count: count() }).from(payments);
+  async getPaidClientsCount(params: {
+    gender?: string;
+    birthYear?: string;
+    age?: string;
+    height?: string;
+    maritalStatus?: string;
+    qualification?: string;
+    profession?: string;
+    permanentCountry?: string;
+    permanentCity?: string;
+    presentCountry?: string;
+    presentCity?: string;
+    q?: string;
+  } = {}, currentUser?: User): Promise<number> {
+    if (!currentUser) {
+      // For dashboard stats - get count of all accepted payments
+      const [result] = await db
+        .select({ count: count() })
+        .from(payments)
+        .where(eq(payments.status, 'accepted'));
+      return result.count;
+    }
+
+    // For paid clients page with filtering
+    const conditions = [eq(payments.status, 'accepted')];
+    
+    // Role-based access: non-admins see only their assigned traffic
+    if (currentUser.role !== 'super_admin') {
+      conditions.push(eq(traffic.assignedBy, currentUser.id));
+    }
+
+    // Add filters
+    if (params.gender) conditions.push(eq(traffic.gender, params.gender));
+    if (params.height) conditions.push(eq(traffic.height, params.height));
+    if (params.maritalStatus) conditions.push(eq(traffic.maritalStatus, params.maritalStatus));
+    if (params.qualification) conditions.push(eq(traffic.qualification, params.qualification));
+    if (params.profession) conditions.push(eq(traffic.profession, params.profession));
+    if (params.permanentCountry) conditions.push(eq(traffic.permanentCountry, params.permanentCountry));
+    if (params.permanentCity) conditions.push(eq(traffic.permanentCity, params.permanentCity));
+    if (params.presentCountry) conditions.push(eq(traffic.presentCountry, params.presentCountry));
+    if (params.presentCity) conditions.push(eq(traffic.presentCity, params.presentCity));
+    
+    // Manual search across multiple fields
+    if (params.q) {
+      const searchTerm = `%${params.q}%`;
+      conditions.push(
+        or(
+          ilike(traffic.name, searchTerm),
+          ilike(traffic.contactNumber, searchTerm),
+          ilike(traffic.email, searchTerm),
+          ilike(traffic.profession, searchTerm),
+          ilike(traffic.qualification, searchTerm),
+          ilike(traffic.permanentCity, searchTerm),
+          ilike(traffic.permanentCountry, searchTerm),
+          ilike(traffic.presentCity, searchTerm),
+          ilike(traffic.presentCountry, searchTerm),
+          ilike(traffic.organization, searchTerm),
+          ilike(traffic.requirements, searchTerm)
+        )!
+      );
+    }
+
+    const [result] = await db
+      .select({ count: count() })
+      .from(payments)
+      .innerJoin(traffic, eq(payments.trafficId, traffic.id))
+      .where(and(...conditions));
+    
     return result.count;
+  }
+
+  async getPaidClients(params: {
+    page?: number;
+    pageSize?: number;
+    gender?: string;
+    birthYear?: string;
+    age?: string;
+    height?: string;
+    maritalStatus?: string;
+    qualification?: string;
+    profession?: string;
+    permanentCountry?: string;
+    permanentCity?: string;
+    presentCountry?: string;
+    presentCity?: string;
+    q?: string;
+  }, currentUser: User): Promise<PaidClientWithPayment[]> {
+    const conditions = [eq(payments.status, 'accepted')];
+    
+    // Role-based access: non-admins see only their assigned traffic
+    if (currentUser.role !== 'super_admin') {
+      conditions.push(eq(traffic.assignedBy, currentUser.id));
+    }
+
+    // Add filters
+    if (params.gender) conditions.push(eq(traffic.gender, params.gender));
+    if (params.height) conditions.push(eq(traffic.height, params.height));
+    if (params.maritalStatus) conditions.push(eq(traffic.maritalStatus, params.maritalStatus));
+    if (params.qualification) conditions.push(eq(traffic.qualification, params.qualification));
+    if (params.profession) conditions.push(eq(traffic.profession, params.profession));
+    if (params.permanentCountry) conditions.push(eq(traffic.permanentCountry, params.permanentCountry));
+    if (params.permanentCity) conditions.push(eq(traffic.permanentCity, params.permanentCity));
+    if (params.presentCountry) conditions.push(eq(traffic.presentCountry, params.presentCountry));
+    if (params.presentCity) conditions.push(eq(traffic.presentCity, params.presentCity));
+    
+    // Manual search across multiple fields
+    if (params.q) {
+      const searchTerm = `%${params.q}%`;
+      conditions.push(
+        or(
+          ilike(traffic.name, searchTerm),
+          ilike(traffic.contactNumber, searchTerm),
+          ilike(traffic.email, searchTerm),
+          ilike(traffic.profession, searchTerm),
+          ilike(traffic.qualification, searchTerm),
+          ilike(traffic.permanentCity, searchTerm),
+          ilike(traffic.permanentCountry, searchTerm),
+          ilike(traffic.presentCity, searchTerm),
+          ilike(traffic.presentCountry, searchTerm),
+          ilike(traffic.organization, searchTerm),
+          ilike(traffic.requirements, searchTerm)
+        )!
+      );
+    }
+
+    const page = params.page || 1;
+    const pageSize = params.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+
+    const result = await db
+      .select({
+        // Traffic fields
+        id: traffic.id,
+        name: traffic.name,
+        contactNumber: traffic.contactNumber,
+        email: traffic.email,
+        priority: traffic.priority,
+        status: traffic.status,
+        assignedBy: traffic.assignedBy,
+        profession: traffic.profession,
+        jobType: traffic.jobType,
+        dateOfBirth: traffic.dateOfBirth,
+        maritalStatus: traffic.maritalStatus,
+        gender: traffic.gender,
+        permanentCountry: traffic.permanentCountry,
+        permanentCity: traffic.permanentCity,
+        presentCountry: traffic.presentCountry,
+        presentCity: traffic.presentCity,
+        height: traffic.height,
+        qualification: traffic.qualification,
+        organization: traffic.organization,
+        religion: traffic.religion,
+        socialTitle: traffic.socialTitle,
+        profilePicture: traffic.profilePicture,
+        candidatePictures: traffic.candidatePictures,
+        curriculumVitae: traffic.curriculumVitae,
+        requirements: traffic.requirements,
+        createdBy: traffic.createdBy,
+        createdAt: traffic.createdAt,
+        // Payment fields
+        paymentDate: payments.createdAt,
+        paymentId: payments.id,
+        packageType: payments.packageType,
+        paidAmount: payments.paidAmount,
+        paymentMethod: payments.paymentMethod,
+      })
+      .from(payments)
+      .innerJoin(traffic, eq(payments.trafficId, traffic.id))
+      .where(and(...conditions))
+      .orderBy(desc(payments.createdAt))
+      .limit(pageSize)
+      .offset(offset);
+    
+    return result.map(item => ({
+      ...item,
+      paymentDate: item.paymentDate?.toISOString() || '',
+    })) as PaidClientWithPayment[];
   }
 
   async getTotalPayments(): Promise<number> {
