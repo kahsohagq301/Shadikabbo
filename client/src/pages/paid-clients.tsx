@@ -65,7 +65,7 @@ export default function PaidClients() {
     setFilters(prev => ({
       ...prev,
       page: 1, // Reset to first page when filtering
-      [key]: value || undefined,
+      [key]: value === "all" ? undefined : value || undefined,
     }));
   };
 
@@ -168,7 +168,7 @@ export default function PaidClients() {
                     <SelectValue placeholder="Gender" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Genders</SelectItem>
+                    <SelectItem value="all">All Genders</SelectItem>
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
                   </SelectContent>
@@ -200,7 +200,7 @@ export default function PaidClients() {
                     <SelectValue placeholder="Marital Status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Status</SelectItem>
+                    <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="single">Single</SelectItem>
                     <SelectItem value="divorced">Divorced</SelectItem>
                     <SelectItem value="widowed">Widowed</SelectItem>
