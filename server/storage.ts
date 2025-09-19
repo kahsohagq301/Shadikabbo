@@ -17,6 +17,7 @@ export interface IStorage {
   getUsersByRole(role: string): Promise<User[]>;
   updateUser(id: string, user: Partial<InsertUser>): Promise<User>;
   toggleUserStatus(id: string): Promise<User>;
+  deleteUser(id: string): Promise<void>;
   
   // Traffic methods
   getAllTraffic(): Promise<Traffic[]>;
@@ -98,6 +99,24 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return user;
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    // Check if user exists before deletion
+    const userToDelete = await this.getUser(id);
+    if (!userToDelete) {
+      throw new Error('User not found');
+    }
+    
+    // Check for related traffic records that reference this user
+    const trafficWithAssignedBy = await db.select().from(traffic).where(eq(traffic.assignedBy, id));
+    const trafficWithCreatedBy = await db.select().from(traffic).where(eq(traffic.createdBy, id));
+    
+    if (trafficWithAssignedBy.length > 0 || trafficWithCreatedBy.length > 0) {
+      throw new Error('Cannot delete user: There are traffic records associated with this user. Please reassign or delete the related records first.');
+    }
+    
+    await db.delete(users).where(eq(users.id, id));
   }
 
   async getAllTraffic(): Promise<Traffic[]> {

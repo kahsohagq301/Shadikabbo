@@ -273,6 +273,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete("/api/accounts/:id", requireEnabledUser, async (req, res) => {
+    // Only super_admin can delete accounts
+    if (req.user?.role !== 'super_admin') {
+      return res.status(403).json({ message: "Access denied. Only Super Admin can delete accounts." });
+    }
+
+    const userIdToDelete = req.params.id;
+
+    // Prevent self-deletion
+    if (req.user?.id === userIdToDelete) {
+      return res.status(400).json({ message: "You cannot delete your own account." });
+    }
+
+    try {
+      // Get the user to be deleted before deletion
+      const userToDelete = await storage.getUser(userIdToDelete);
+      if (!userToDelete) {
+        return res.status(404).json({ message: "User not found." });
+      }
+
+      // Delete the user
+      await storage.deleteUser(userIdToDelete);
+
+      // If the deleted user is currently logged in somewhere, invalidate their session
+      // This is handled by the session store and the deserializeUser function
+      
+      res.json({ message: "Account deleted successfully.", deletedUser: { id: userToDelete.id, username: userToDelete.username } });
+    } catch (error: any) {
+      // Provide cleaner error messages without exposing internal details
+      if (error.message === 'User not found') {
+        return res.status(404).json({ message: "User not found." });
+      }
+      if (error.message.includes('traffic records associated')) {
+        return res.status(400).json({ message: error.message });
+      }
+      res.status(500).json({ message: "Failed to delete account. Please try again." });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
