@@ -67,7 +67,7 @@ export interface IStorage {
   
   // Statistics
   getTrafficCount(): Promise<number>;
-  getPaidClientsCount(): Promise<number>;
+  getPaidClientsCountForStats(): Promise<number>;
   getTotalPayments(): Promise<number>;
   
   sessionStore: Store;
@@ -266,6 +266,15 @@ export class DatabaseStorage implements IStorage {
     return result.count;
   }
 
+  async getPaidClientsCountForStats(): Promise<number> {
+    // For dashboard stats - get count of all accepted payments
+    const [result] = await db
+      .select({ count: count() })
+      .from(payments)
+      .where(eq(payments.status, 'accepted'));
+    return result.count;
+  }
+
   async getPaidClientsCount(params: {
     gender?: string;
     birthYear?: string;
@@ -279,15 +288,7 @@ export class DatabaseStorage implements IStorage {
     presentCountry?: string;
     presentCity?: string;
     q?: string;
-  } = {}, currentUser?: User): Promise<number> {
-    if (!currentUser) {
-      // For dashboard stats - get count of all accepted payments
-      const [result] = await db
-        .select({ count: count() })
-        .from(payments)
-        .where(eq(payments.status, 'accepted'));
-      return result.count;
-    }
+  }, currentUser: User): Promise<number> {
 
     // For paid clients page with filtering
     const conditions = [eq(payments.status, 'accepted')];
