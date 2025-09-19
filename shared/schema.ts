@@ -58,6 +58,7 @@ export const payments = pgTable("payments", {
   paymentMethod: text("payment_method").notNull(),
   afterMarriageFee: decimal("after_marriage_fee", { precision: 10, scale: 2 }),
   invoiceGenerated: boolean("invoice_generated").default(false),
+  status: text("status").notNull().default("pending"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -124,6 +125,12 @@ export const insertTrafficSchema = createInsertSchema(traffic)
 export const insertPaymentSchema = createInsertSchema(payments).omit({
   id: true,
   createdAt: true,
+}).extend({
+  status: z.enum(["pending", "accepted", "cancelled"]).default("pending"),
+});
+
+export const updatePaymentStatusSchema = z.object({
+  status: z.enum(["pending", "accepted", "cancelled"]),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -132,3 +139,9 @@ export type InsertTraffic = z.infer<typeof insertTrafficSchema>;
 export type Traffic = typeof traffic.$inferSelect;
 export type InsertPayment = z.infer<typeof insertPaymentSchema>;
 export type Payment = typeof payments.$inferSelect;
+export type UpdatePaymentStatus = z.infer<typeof updatePaymentStatusSchema>;
+
+// Extended types for UI components
+export interface PaymentRequest extends Payment {
+  trafficName: string;
+}
