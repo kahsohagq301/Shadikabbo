@@ -656,6 +656,45 @@ export default function Account() {
           </Form>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Account Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Account</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this account? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          {accountToDelete && (
+            <div className="py-4">
+              <p className="text-sm">
+                <strong>Account:</strong> {accountToDelete.name || accountToDelete.username}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                <strong>Role:</strong> {getRoleDisplayName(accountToDelete.role)}
+              </p>
+            </div>
+          )}
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteDialogOpen(false)}
+              data-testid="button-cancel-delete"
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={confirmDeleteAccount}
+              disabled={deleteMutation.isPending}
+              data-testid="button-confirm-delete"
+            >
+              {deleteMutation.isPending ? "Deleting..." : "Confirm"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       </div>
     </AppLayout>
   );
