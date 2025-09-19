@@ -11,6 +11,8 @@ import { Eye, Edit, Search, Filter } from "lucide-react";
 import { format } from "date-fns";
 import { useAuth } from "@/hooks/use-auth";
 import { PaidClientWithPayment } from "@shared/schema";
+import { PaidClientViewDialog } from "@/components/paid-client-view-dialog";
+import { PaidClientEditDialog } from "@/components/paid-client-edit-dialog";
 
 interface PaidClientsFilters {
   page: number;
