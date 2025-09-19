@@ -72,16 +72,24 @@ export default function Account() {
       officialNumber: "",
       role: "cro_agent",
       dateOfBirth: "",
-      gender: "",
+      gender: undefined,
       password: "",
       confirmPassword: "",
       isEnabled: true,
     },
   });
 
-  // Edit account form  
-  const editForm = useForm({
+  // Edit account form
+  type InsertUser = z.infer<typeof insertUserSchema>;
+  type EditAccountForm = Partial<InsertUser>;
+  const editForm = useForm<EditAccountForm>({
     resolver: zodResolver(insertUserSchema.partial()),
+    defaultValues: {
+      name: "",
+      officialNumber: "",
+      dateOfBirth: "",
+      gender: undefined,
+    },
   });
 
   // Create account mutation
@@ -228,7 +236,7 @@ export default function Account() {
                 </DialogDescription>
               </DialogHeader>
               <Form {...createForm}>
-                <form onSubmit={createForm.handleSubmit((data) => createMutation.mutate(data))} className="space-y-6">
+                <form onSubmit={createForm.handleSubmit((data: CreateAccountForm) => createMutation.mutate(data))} className="space-y-6">
                   {/* Row 1: Personal Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
@@ -238,7 +246,7 @@ export default function Account() {
                         <FormItem>
                           <FormLabel>Full Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter full name" {...field} data-testid="input-create-name" />
+                            <Input placeholder="Enter full name" {...field} value={field.value ?? ""} data-testid="input-create-name" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -268,7 +276,7 @@ export default function Account() {
                         <FormItem>
                           <FormLabel>Official Number</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter contact number" {...field} data-testid="input-create-contact" />
+                            <Input placeholder="Enter contact number" {...field} value={field.value ?? ""} data-testid="input-create-contact" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -280,7 +288,7 @@ export default function Account() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Account Role</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                          <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
                               <SelectTrigger data-testid="select-create-role">
                                 <SelectValue placeholder="Select role" />
@@ -307,7 +315,7 @@ export default function Account() {
                         <FormItem>
                           <FormLabel>Date of Birth</FormLabel>
                           <FormControl>
-                            <Input type="date" {...field} data-testid="input-create-dob" />
+                            <Input type="date" {...field} value={field.value ?? ""} data-testid="input-create-dob" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -319,7 +327,7 @@ export default function Account() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Gender</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                          <Select onValueChange={field.onChange} value={field.value ?? undefined}>
                             <FormControl>
                               <SelectTrigger data-testid="select-create-gender">
                                 <SelectValue placeholder="Select gender" />
