@@ -14,23 +14,9 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
+import { PaymentRequest } from "@shared/schema";
 import { Check, X, DollarSign, AlertCircle } from "lucide-react";
-import { format } from "date-fns";
 
-interface PaymentRequest {
-  id: string;
-  trafficId: string;
-  trafficName: string;
-  packageType: string;
-  paidAmount: string;
-  discountAmount: string;
-  dueAmount: string;
-  totalAmount: string;
-  paymentMethod: string;
-  afterMarriageFee: string | null;
-  createdAt: string;
-  status: "pending" | "accepted" | "cancelled";
-}
 
 export default function Payment() {
   const { user } = useAuth();
@@ -150,7 +136,7 @@ export default function Payment() {
                     {paymentRequests.map((payment) => (
                       <TableRow key={payment.id} data-testid={`row-payment-${payment.id}`}>
                         <TableCell data-testid={`cell-date-${payment.id}`}>
-                          {format(new Date(payment.createdAt), "MMM dd, yyyy")}
+                          {payment.createdAt ? new Date(payment.createdAt).toLocaleDateString() : 'N/A'}
                         </TableCell>
                         <TableCell data-testid={`cell-name-${payment.id}`}>
                           <div className="font-medium">{payment.trafficName}</div>
