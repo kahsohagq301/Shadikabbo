@@ -213,7 +213,7 @@ export default function Account() {
                 Add Account
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Add New Account</DialogTitle>
                 <DialogDescription>
@@ -221,128 +221,143 @@ export default function Account() {
                 </DialogDescription>
               </DialogHeader>
               <Form {...createForm}>
-                <form onSubmit={createForm.handleSubmit((data) => createMutation.mutate(data))} className="space-y-4">
-                  <FormField
-                    control={createForm.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter full name" {...field} data-testid="input-create-name" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter username" {...field} data-testid="input-create-username" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="officialNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Official Number</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter contact number" {...field} data-testid="input-create-contact" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="role"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Account Role</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <form onSubmit={createForm.handleSubmit((data) => createMutation.mutate(data))} className="space-y-6">
+                  {/* Row 1: Personal Information */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Full Name</FormLabel>
                           <FormControl>
-                            <SelectTrigger data-testid="select-create-role">
-                              <SelectValue placeholder="Select role" />
-                            </SelectTrigger>
+                            <Input placeholder="Enter full name" {...field} data-testid="input-create-name" />
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="cro_agent">CRO Agent</SelectItem>
-                            <SelectItem value="matchmaker">Matchmaker</SelectItem>
-                            <SelectItem value="super_admin">Super Admin</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="dateOfBirth"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Date of Birth</FormLabel>
-                        <FormControl>
-                          <Input type="date" {...field} data-testid="input-create-dob" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="gender"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Gender</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={createForm.control}
+                      name="username"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Username</FormLabel>
                           <FormControl>
-                            <SelectTrigger data-testid="select-create-gender">
-                              <SelectValue placeholder="Select gender" />
-                            </SelectTrigger>
+                            <Input placeholder="Enter username" {...field} data-testid="input-create-username" />
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Create Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" placeholder="Enter password" {...field} data-testid="input-create-password" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" placeholder="Confirm password" {...field} data-testid="input-create-confirm-password" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Row 2: Contact & Role */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="officialNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Official Number</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter contact number" {...field} data-testid="input-create-contact" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={createForm.control}
+                      name="role"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Account Role</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-create-role">
+                                <SelectValue placeholder="Select role" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="cro_agent">CRO Agent</SelectItem>
+                              <SelectItem value="matchmaker">Matchmaker</SelectItem>
+                              <SelectItem value="super_admin">Super Admin</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Row 3: Date of Birth & Gender */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="dateOfBirth"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Date of Birth</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} data-testid="input-create-dob" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={createForm.control}
+                      name="gender"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Gender</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-create-gender">
+                                <SelectValue placeholder="Select gender" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="male">Male</SelectItem>
+                              <SelectItem value="female">Female</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Row 4: Password Fields */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={createForm.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Create Password</FormLabel>
+                          <FormControl>
+                            <Input type="password" placeholder="Enter password" {...field} data-testid="input-create-password" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={createForm.control}
+                      name="confirmPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Confirm Password</FormLabel>
+                          <FormControl>
+                            <Input type="password" placeholder="Confirm password" {...field} data-testid="input-create-confirm-password" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <DialogFooter>
                     <Button type="submit" disabled={createMutation.isPending} data-testid="button-create-account">
                       {createMutation.isPending ? "Creating..." : "Create Account"}
