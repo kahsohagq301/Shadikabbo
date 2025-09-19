@@ -88,22 +88,44 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
 
   const createTrafficMutation = useMutation({
     mutationFn: async (data: any) => {
-      await apiRequest("POST", "/api/traffic", data);
+      // First, create the traffic record
+      const trafficResponse = await apiRequest("POST", "/api/traffic", data);
+      const trafficData = await trafficResponse.json();
+      
+      // If payment information is provided, create a payment request
+      if (data.packageType && data.paymentMethod && data.paidAmount >= 0) {
+        const paymentData = {
+          trafficId: trafficData.id,
+          packageType: data.packageType,
+          paidAmount: data.paidAmount.toString(),
+          discountAmount: data.discountAmount.toString(),
+          dueAmount: data.dueAmount.toString(),
+          totalAmount: data.totalAmount.toString(),
+          paymentMethod: data.paymentMethod,
+          afterMarriageFee: data.afterMarriageFee ? data.afterMarriageFee.toString() : null,
+          status: "pending"
+        };
+        
+        await apiRequest("POST", "/api/payments", paymentData);
+      }
+      
+      return trafficData;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/traffic"] });
       queryClient.invalidateQueries({ queryKey: ["/api/dashboard/stats"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/payments/pending"] });
       toast({
         title: "Success",
-        description: "Traffic record created successfully",
+        description: "Traffic record and payment request created successfully",
       });
       onClose();
       resetForm();
     },
-    onError: () => {
+    onError: (error: any) => {
       toast({
         title: "Error",
-        description: "Failed to create traffic record",
+        description: "Failed to create traffic record and payment request",
         variant: "destructive",
       });
     },
