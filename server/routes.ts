@@ -82,6 +82,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/payments/pending", requireEnabledUser, async (req, res) => {
+    try {
+      const pendingPayments = await storage.getPendingPayments();
+      res.json(pendingPayments);
+    } catch (error) {
+      console.error('Error fetching pending payments:', error);
+      res.status(500).json({ message: "Failed to fetch pending payments" });
+    }
+  });
+
+  app.post("/api/payments/:id/accept", requireEnabledUser, async (req, res) => {
+    // Check if user is super_admin
+    if (req.user?.role !== 'super_admin') {
+      return res.status(403).json({ message: "Only Super Admin can accept payment requests" });
+    }
+
+    try {
+      const paymentId = req.params.id;
+      const updatedPayment = await storage.updatePaymentStatus(paymentId, { status: 'accepted' });
+      res.json(updatedPayment);
+    } catch (error: any) {
+      console.error('Error accepting payment:', error);
+      if (error.message === 'Payment not found') {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      if (error.message.includes('Payment status is already')) {
+        return res.status(409).json({ message: "Payment is not in pending status" });
+      }
+      res.status(500).json({ message: "Failed to accept payment request" });
+    }
+  });
+
+  app.post("/api/payments/:id/cancel", requireEnabledUser, async (req, res) => {
+    // Check if user is super_admin
+    if (req.user?.role !== 'super_admin') {
+      return res.status(403).json({ message: "Only Super Admin can cancel payment requests" });
+    }
+
+    try {
+      const paymentId = req.params.id;
+      const updatedPayment = await storage.updatePaymentStatus(paymentId, { status: 'cancelled' });
+      res.json(updatedPayment);
+    } catch (error: any) {
+      console.error('Error cancelling payment:', error);
+      if (error.message === 'Payment not found') {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      if (error.message.includes('Payment status is already')) {
+        return res.status(409).json({ message: "Payment is not in pending status" });
+      }
+      res.status(500).json({ message: "Failed to cancel payment request" });
+    }
+  });
+
   // Dashboard statistics
   app.get("/api/dashboard/stats", requireEnabledUser, async (req, res) => {
 

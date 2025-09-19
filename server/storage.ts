@@ -1,6 +1,6 @@
-import { users, traffic, payments, type User, type InsertUser, type Traffic, type InsertTraffic, type Payment, type InsertPayment } from "@shared/schema";
+import { users, traffic, payments, type User, type InsertUser, type Traffic, type InsertTraffic, type Payment, type InsertPayment, type PaymentRequest, type UpdatePaymentStatus } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, count } from "drizzle-orm";
+import { eq, desc, count, sql } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { Store } from "express-session";
@@ -28,6 +28,9 @@ export interface IStorage {
   // Payment methods
   createPayment(payment: InsertPayment): Promise<Payment>;
   getPaymentByTrafficId(trafficId: string): Promise<Payment | undefined>;
+  getPendingPayments(): Promise<PaymentRequest[]>;
+  updatePaymentStatus(id: string, status: UpdatePaymentStatus): Promise<Payment>;
+  getPaymentById(id: string): Promise<Payment | undefined>;
   
   // Statistics
   getTrafficCount(): Promise<number>;
@@ -147,6 +150,56 @@ export class DatabaseStorage implements IStorage {
   async getPaymentByTrafficId(trafficId: string): Promise<Payment | undefined> {
     const [payment] = await db.select().from(payments).where(eq(payments.trafficId, trafficId));
     return payment || undefined;
+  }
+
+  async getPaymentById(id: string): Promise<Payment | undefined> {
+    const [payment] = await db.select().from(payments).where(eq(payments.id, id));
+    return payment || undefined;
+  }
+
+  async getPendingPayments(): Promise<PaymentRequest[]> {
+    const result = await db
+      .select({
+        id: payments.id,
+        trafficId: payments.trafficId,
+        trafficName: traffic.name,
+        packageType: payments.packageType,
+        paidAmount: payments.paidAmount,
+        discountAmount: payments.discountAmount,
+        dueAmount: payments.dueAmount,
+        totalAmount: payments.totalAmount,
+        paymentMethod: payments.paymentMethod,
+        afterMarriageFee: payments.afterMarriageFee,
+        invoiceGenerated: payments.invoiceGenerated,
+        status: payments.status,
+        createdAt: payments.createdAt,
+      })
+      .from(payments)
+      .innerJoin(traffic, eq(payments.trafficId, traffic.id))
+      .where(eq(payments.status, 'pending'))
+      .orderBy(desc(payments.createdAt));
+    
+    return result as PaymentRequest[];
+  }
+
+  async updatePaymentStatus(id: string, statusData: UpdatePaymentStatus): Promise<Payment> {
+    // Atomic update: only update if payment exists and status is pending
+    const [payment] = await db
+      .update(payments)
+      .set({ status: statusData.status })
+      .where(sql`${payments.id} = ${id} AND ${payments.status} = 'pending'`)
+      .returning();
+
+    if (!payment) {
+      // Check if payment exists to distinguish 404 vs 409
+      const existingPayment = await this.getPaymentById(id);
+      if (!existingPayment) {
+        throw new Error('Payment not found');
+      }
+      throw new Error(`Payment status is already ${existingPayment.status}`);
+    }
+
+    return payment;
   }
 
   async getTrafficCount(): Promise<number> {
