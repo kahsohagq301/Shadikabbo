@@ -82,14 +82,30 @@ export function Sidebar() {
             key={path} 
             href={path}
             className={cn(
-              "block px-3 py-2 text-xs font-medium rounded transition-colors cursor-pointer",
+              "relative group block px-4 py-3 text-xs font-semibold rounded-lg cursor-pointer overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-[1.02]",
               location === path
-                ? "bg-blue-100 text-blue-900 border-l-2 border-blue-600"
-                : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                ? "bg-gradient-to-r from-blue-500 to-red-500 text-white shadow-lg border-l-4 border-red-600"
+                : "text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-400 hover:to-red-400 hover:shadow-md"
             )}
             data-testid={`link-${label.toLowerCase().replace(' ', '-')}`}
           >
-            {label}
+            {/* Background animation overlay */}
+            <div className={cn(
+              "absolute inset-0 bg-gradient-to-r from-blue-400/20 to-red-400/20 transform transition-transform duration-300 ease-out",
+              location === path 
+                ? "translate-x-0" 
+                : "-translate-x-full group-hover:translate-x-0"
+            )} />
+            
+            {/* Text content */}
+            <span className="relative z-10 transition-all duration-200 ease-in-out">
+              {label}
+            </span>
+            
+            {/* Active state indicator */}
+            {location === path && (
+              <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-white rounded-l-full animate-pulse" />
+            )}
           </Link>
         ))}
       </nav>
