@@ -36,7 +36,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-52 bg-white border-r border-slate-200 min-h-screen flex flex-col shadow-sm">
+    <div className="fixed left-0 top-0 w-52 bg-white border-r border-slate-200 min-h-screen flex flex-col shadow-sm z-40">
       {/* Header */}
       <div className="px-4 py-4 border-b border-slate-200 flex items-center justify-center">
         <img 
