@@ -47,30 +47,30 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col shadow-md">
+    <div className="w-72 bg-gradient-to-b from-slate-50 to-white border-r border-slate-200/80 min-h-screen flex flex-col shadow-xl backdrop-blur-sm">
       {/* Header */}
-      <div className="px-4 py-5 border-b border-gray-200 flex items-center justify-center">
+      <div className="px-6 py-6 border-b border-slate-200/60 flex items-center justify-center bg-white/60 backdrop-blur-sm">
         <img 
           src={logoPath}
           alt="ShadiKabbo Logo" 
-          className="h-20 object-contain w-auto max-w-[200px]"
+          className="h-20 object-contain w-auto max-w-[220px] drop-shadow-sm"
           data-testid="img-logo"
         />
       </div>
 
       {/* User Profile */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center bg-gray-50 rounded-lg p-3">
-          <Avatar className="w-9 h-9">
-            <AvatarFallback className="bg-gradient-to-br from-blue-600 to-red-600 text-white text-sm font-semibold">
+      <div className="p-6 border-b border-slate-200/60">
+        <div className="flex items-center bg-gradient-to-r from-blue-50/80 to-indigo-50/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-slate-200/50">
+          <Avatar className="w-12 h-12 shadow-md ring-2 ring-white">
+            <AvatarFallback className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white text-base font-bold">
               SA
             </AvatarFallback>
           </Avatar>
-          <div className="px-3 flex-1 min-w-0">
-            <div className="text-sm font-semibold text-gray-800 truncate" data-testid="text-username">
+          <div className="px-4 flex-1 min-w-0">
+            <div className="text-base font-bold text-slate-800 truncate" data-testid="text-username">
               {user?.username}
             </div>
-            <div className="text-xs text-gray-600 font-medium" data-testid="text-user-role">
+            <div className="text-sm text-slate-600 font-medium" data-testid="text-user-role">
               {getRoleDisplayName(user?.role)}
             </div>
           </div>
@@ -78,7 +78,7 @@ export function Sidebar() {
             variant="ghost" 
             size="sm" 
             onClick={() => logoutMutation.mutate()}
-            className="text-gray-500 hover:text-red-600 hover:bg-red-50 p-2 rounded-md transition-colors duration-200"
+            className="text-slate-500 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md"
             data-testid="button-logout"
           >
             <LogOut className="h-4 w-4" />
@@ -87,26 +87,34 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="p-4 space-y-1 flex-1">
+      <nav className="p-6 space-y-2 flex-1">
         {navItems.map(({ path, label, icon: Icon }) => (
           <Link 
             key={path} 
             href={path}
             className={cn(
-              "flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer block",
+              "flex items-center space-x-4 px-4 py-3 rounded-xl transition-all duration-300 cursor-pointer block group relative overflow-hidden",
               location === path
-                ? "bg-gradient-to-r from-blue-50 to-red-50 text-gray-900 font-semibold border-l-4 border-blue-600"
-                : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold shadow-lg transform scale-[1.02] border border-blue-200"
+                : "text-slate-700 hover:text-blue-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:shadow-md hover:scale-[1.01] border border-transparent hover:border-blue-200/50"
             )}
             data-testid={`link-${label.toLowerCase().replace(' ', '-')}`}
           >
             <Icon className={cn(
-              "h-4 w-4 transition-colors duration-200 flex-shrink-0",
+              "h-5 w-5 transition-all duration-300 flex-shrink-0 group-hover:scale-110",
               location === path 
-                ? "text-blue-600" 
-                : "text-gray-600"
+                ? "text-white drop-shadow-sm" 
+                : "text-slate-600 group-hover:text-blue-600"
             )} />
-            <span className="text-xs font-normal leading-none">{label}</span>
+            <span className={cn(
+              "text-sm font-semibold leading-relaxed transition-all duration-300",
+              location === path 
+                ? "text-white drop-shadow-sm" 
+                : "text-slate-700 group-hover:text-blue-700"
+            )}>{label}</span>
+            {location === path && (
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-xl animate-pulse"></div>
+            )}
           </Link>
         ))}
       </nav>
