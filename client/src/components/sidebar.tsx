@@ -82,7 +82,7 @@ export function Sidebar() {
             key={path} 
             href={path}
             className={cn(
-              "relative group block px-4 py-3 text-xs font-semibold rounded-lg cursor-pointer overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-[1.02]",
+              "relative group block px-3 py-2.5 text-sm font-medium rounded-lg cursor-pointer overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-[1.02] whitespace-nowrap",
               location === path
                 ? "bg-gradient-to-r from-blue-500 to-red-500 text-white shadow-lg border-l-4 border-red-600"
                 : "text-slate-700 hover:text-white hover:bg-gradient-to-r hover:from-blue-400 hover:to-red-400 hover:shadow-md"
