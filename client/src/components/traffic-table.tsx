@@ -57,7 +57,7 @@ export function TrafficTable() {
     };
     
     return (
-      <Badge className={statusColors[status as keyof typeof statusColors] || statusColors.pending}>
+      <Badge className={`text-xs ${statusColors[status as keyof typeof statusColors] || statusColors.pending}`}>
         {status}
       </Badge>
     );
@@ -66,8 +66,8 @@ export function TrafficTable() {
   if (isLoading) {
     return (
       <Card className="border-border">
-        <CardContent className="p-6">
-          <div className="text-center text-muted-foreground">Loading traffic data...</div>
+        <CardContent className="p-4">
+          <div className="text-center text-sm text-muted-foreground">Loading traffic data...</div>
         </CardContent>
       </Card>
     );
@@ -75,8 +75,8 @@ export function TrafficTable() {
 
   return (
     <Card className="border-border">
-      <CardHeader className="border-b border-border">
-        <CardTitle className="text-xl font-semibold text-foreground" data-testid="text-traffic-table-title">
+      <CardHeader className="border-b border-border py-3 px-4">
+        <CardTitle className="text-base font-medium text-foreground" data-testid="text-traffic-table-title">
           All Traffic Records
         </CardTitle>
       </CardHeader>
@@ -86,18 +86,18 @@ export function TrafficTable() {
           <Table>
             <TableHeader className="bg-muted">
               <TableRow>
-                <TableHead className="text-muted-foreground">Date</TableHead>
-                <TableHead className="text-muted-foreground">Name</TableHead>
-                <TableHead className="text-muted-foreground">Contact</TableHead>
-                <TableHead className="text-muted-foreground">Email</TableHead>
-                <TableHead className="text-muted-foreground">Status</TableHead>
-                <TableHead className="text-muted-foreground">Actions</TableHead>
+                <TableHead className="text-xs font-medium text-muted-foreground py-2">Date</TableHead>
+                <TableHead className="text-xs font-medium text-muted-foreground py-2">Name</TableHead>
+                <TableHead className="text-xs font-medium text-muted-foreground py-2">Contact</TableHead>
+                <TableHead className="text-xs font-medium text-muted-foreground py-2">Email</TableHead>
+                <TableHead className="text-xs font-medium text-muted-foreground py-2">Status</TableHead>
+                <TableHead className="text-xs font-medium text-muted-foreground py-2">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {!trafficData || trafficData.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground" data-testid="text-no-traffic">
+                  <TableCell colSpan={6} className="text-center py-6 text-sm text-muted-foreground" data-testid="text-no-traffic">
                     No traffic records found. Click "Add Traffic" to create your first record.
                   </TableCell>
                 </TableRow>
@@ -108,48 +108,48 @@ export function TrafficTable() {
                     className="table-row hover:bg-primary/5"
                     data-testid={`row-traffic-${index}`}
                   >
-                    <TableCell className="text-foreground" data-testid={`text-traffic-date-${index}`}>
+                    <TableCell className="py-2 text-xs text-foreground" data-testid={`text-traffic-date-${index}`}>
                       {new Date(record.createdAt).toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="text-foreground" data-testid={`text-traffic-name-${index}`}>
+                    <TableCell className="py-2 text-sm font-medium text-foreground" data-testid={`text-traffic-name-${index}`}>
                       {record.name}
                     </TableCell>
-                    <TableCell className="text-foreground" data-testid={`text-traffic-contact-${index}`}>
+                    <TableCell className="py-2 text-sm text-foreground" data-testid={`text-traffic-contact-${index}`}>
                       {record.contactNumber}
                     </TableCell>
-                    <TableCell className="text-foreground" data-testid={`text-traffic-email-${index}`}>
+                    <TableCell className="py-2 text-sm text-foreground" data-testid={`text-traffic-email-${index}`}>
                       {record.email}
                     </TableCell>
-                    <TableCell data-testid={`status-traffic-${index}`}>
+                    <TableCell className="py-2" data-testid={`status-traffic-${index}`}>
                       {getStatusBadge(record.status)}
                     </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
+                    <TableCell className="py-2">
+                      <div className="flex space-x-1">
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="text-blue-500 hover:text-blue-700 hover:bg-blue-500/10"
+                          className="h-7 w-7 p-1 text-blue-500 hover:text-blue-700 hover:bg-blue-500/10"
                           data-testid={`button-view-${index}`}
                         >
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-3 w-3" />
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="text-green-500 hover:text-green-700 hover:bg-green-500/10"
+                          className="h-7 w-7 p-1 text-green-500 hover:text-green-700 hover:bg-green-500/10"
                           data-testid={`button-edit-${index}`}
                         >
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-3 w-3" />
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm" 
                           onClick={() => handleDelete(record.id)}
-                          className="text-red-500 hover:text-red-700 hover:bg-red-500/10"
+                          className="h-7 w-7 p-1 text-red-500 hover:text-red-700 hover:bg-red-500/10"
                           disabled={deleteMutation.isPending}
                           data-testid={`button-delete-${index}`}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>
                     </TableCell>

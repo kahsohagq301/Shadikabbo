@@ -159,10 +159,10 @@ export default function PaidClients() {
   if (isLoading) {
     return (
       <AppLayout>
-        <div className="p-6">
+        <div className="p-4">
           <Card className="border-border">
-            <CardContent className="p-6">
-              <div className="text-center text-muted-foreground">Loading paid clients...</div>
+            <CardContent className="p-4">
+              <div className="text-center text-sm text-muted-foreground">Loading paid clients...</div>
             </CardContent>
           </Card>
         </div>
@@ -175,16 +175,16 @@ export default function PaidClients() {
 
   return (
     <AppLayout>
-      <div className="p-6">
+      <div className="p-4">
         {/* Compact Search & Filters Section */}
         <Card className="mb-4 border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
+          <CardHeader className="py-3 px-4">
+            <CardTitle className="text-base font-medium text-foreground flex items-center gap-2">
               <Search className="h-4 w-4 text-primary" />
               Search & Filter Clients
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 p-4">
+          <CardContent className="space-y-3 p-4">
             {/* Compact Search */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />

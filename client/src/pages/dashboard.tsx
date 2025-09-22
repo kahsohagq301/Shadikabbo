@@ -63,12 +63,12 @@ export default function Dashboard() {
 
   return (
     <AppLayout>
-      <div className="p-6">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" data-testid="text-dashboard-title">
+      <div className="p-4">
+          <div className="mb-4">
+            <h1 className="text-xl font-semibold text-foreground mb-1 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" data-testid="text-dashboard-title">
               Dashboard
             </h1>
-            <p className="text-lg text-muted-foreground font-medium" data-testid="text-dashboard-subtitle">
+            <p className="text-sm text-muted-foreground" data-testid="text-dashboard-subtitle">
               Welcome back! Here's what's happening with your matchmaking business today.
             </p>
           </div>
@@ -76,15 +76,15 @@ export default function Dashboard() {
           <DashboardStats stats={stats} isLoading={statsLoading} />
 
           {/* Recent Activity Table */}
-          <Card className="border-border shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <CardHeader className="border-b border-border bg-gradient-to-r from-primary/5 to-secondary/5">
+          <Card className="border-border">
+            <CardHeader className="border-b border-border py-3 px-4">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-2xl font-bold text-foreground" data-testid="text-recent-activity">
+                <CardTitle className="text-base font-medium text-foreground" data-testid="text-recent-activity">
                   Recent Activity
                 </CardTitle>
-                <div className="flex items-center space-x-2 bg-green-50 px-3 py-1 rounded-full">
-                  <span className="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
-                  <span className="text-sm text-green-700 font-medium" data-testid="text-live-updating">
+                <div className="flex items-center space-x-2 bg-green-50 px-2 py-1 rounded-full">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full pulse-dot"></span>
+                  <span className="text-xs text-green-700 font-medium" data-testid="text-live-updating">
                     Live updating
                   </span>
                 </div>
@@ -96,11 +96,11 @@ export default function Dashboard() {
                 <Table>
                   <TableHeader className="bg-muted">
                     <TableRow>
-                      <TableHead className="text-muted-foreground">Date</TableHead>
-                      <TableHead className="text-muted-foreground">Traffic</TableHead>
-                      <TableHead className="text-muted-foreground">Paid Client</TableHead>
-                      <TableHead className="text-muted-foreground">Payment Amount</TableHead>
-                      <TableHead className="text-muted-foreground">Matchmaking</TableHead>
+                      <TableHead className="text-xs font-medium text-muted-foreground py-2">Date</TableHead>
+                      <TableHead className="text-xs font-medium text-muted-foreground py-2">Traffic</TableHead>
+                      <TableHead className="text-xs font-medium text-muted-foreground py-2">Paid Client</TableHead>
+                      <TableHead className="text-xs font-medium text-muted-foreground py-2">Payment Amount</TableHead>
+                      <TableHead className="text-xs font-medium text-muted-foreground py-2">Matchmaking</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -110,20 +110,20 @@ export default function Dashboard() {
                         className="table-row hover:bg-primary/5"
                         data-testid={`row-activity-${index}`}
                       >
-                        <TableCell className="text-foreground" data-testid={`text-date-${index}`}>
+                        <TableCell className="py-2 text-xs text-foreground" data-testid={`text-date-${index}`}>
                           {activity.date}
                         </TableCell>
-                        <TableCell className="text-foreground" data-testid={`text-traffic-${index}`}>
+                        <TableCell className="py-2 text-sm font-medium text-foreground" data-testid={`text-traffic-${index}`}>
                           {activity.traffic}
                         </TableCell>
-                        <TableCell className="text-foreground" data-testid={`text-paid-client-${index}`}>
+                        <TableCell className="py-2 text-sm font-medium text-foreground" data-testid={`text-paid-client-${index}`}>
                           {activity.paidClient}
                         </TableCell>
-                        <TableCell className="text-foreground" data-testid={`text-payment-${index}`}>
+                        <TableCell className="py-2 text-sm font-medium text-foreground" data-testid={`text-payment-${index}`}>
                           {activity.paymentAmount}
                         </TableCell>
                         <TableCell 
-                          className={activity.status === 'active' ? 'text-green-500' : 'text-yellow-500'}
+                          className={`py-2 text-sm ${activity.status === 'active' ? 'text-green-500' : 'text-yellow-500'}`}
                           data-testid={`text-matchmaking-${index}`}
                         >
                           {activity.matchmaking}
