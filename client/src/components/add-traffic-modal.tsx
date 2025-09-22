@@ -231,17 +231,20 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader className="border-b border-border pb-4">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background">
+        <DialogHeader className="border-b border-border pb-6 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-t-lg -m-6 mb-0 p-6">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-bold text-foreground" data-testid="text-modal-title">
+            <DialogTitle className="text-2xl font-bold text-foreground flex items-center gap-3" data-testid="text-modal-title">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <CreditCard className="h-5 w-5 text-primary" />
+              </div>
               Add New Traffic
             </DialogTitle>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground hover:bg-destructive/10 rounded-full w-8 h-8 p-0"
               data-testid="button-close-modal"
             >
               <X className="h-4 w-4" />
@@ -249,59 +252,75 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
           </div>
         </DialogHeader>
 
-        {/* Step Indicator */}
-        <div className="border-b border-border pb-4">
-          <div className="flex items-center space-x-4">
+        {/* Professional Step Indicator */}
+        <div className="py-6">
+          <div className="flex items-center justify-between max-w-md mx-auto">
             {getStepIndicator(1)}
-            <div className="flex-1 h-px bg-border"></div>
+            <div className="flex-1 h-0.5 bg-gradient-to-r from-primary/20 to-primary/40 mx-4"></div>
             {getStepIndicator(2)}
-            <div className="flex-1 h-px bg-border"></div>
+            <div className="flex-1 h-0.5 bg-gradient-to-r from-primary/20 to-primary/40 mx-4"></div>
             {getStepIndicator(3)}
           </div>
         </div>
 
         {/* Step 1: Basic Info */}
         {currentStep === 1 && (
-          <div className="space-y-6" data-testid="form-step-1">
-            <h3 className="text-lg font-semibold text-foreground">Basic Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="name">Full Name *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => updateFormData("name", e.target.value)}
-                  placeholder="Enter full name"
-                  data-testid="input-name"
-                  required
-                />
+          <div className="pb-6" data-testid="form-step-1">
+            <div className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">1</span>
+                </div>
+                <h3 className="text-xl font-bold text-foreground">Basic Information</h3>
               </div>
-              <div>
-                <Label htmlFor="contact">Contact Number *</Label>
-                <Input
-                  id="contact"
-                  value={formData.contactNumber}
-                  onChange={(e) => updateFormData("contactNumber", e.target.value)}
-                  placeholder="+880..."
-                  data-testid="input-contact"
-                  required
-                />
-              </div>
-              <div className="md:col-span-2">
-                <Label htmlFor="email">Email Address *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => updateFormData("email", e.target.value)}
-                  placeholder="Enter email address"
-                  data-testid="input-email"
-                  required
-                />
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-sm font-semibold text-foreground">Full Name *</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => updateFormData("name", e.target.value)}
+                    placeholder="Enter full name"
+                    data-testid="input-name"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="contact" className="text-sm font-semibold text-foreground">Contact Number *</Label>
+                  <Input
+                    id="contact"
+                    value={formData.contactNumber}
+                    onChange={(e) => updateFormData("contactNumber", e.target.value)}
+                    placeholder="+880..."
+                    data-testid="input-contact"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    required
+                  />
+                </div>
+                <div className="lg:col-span-2 space-y-2">
+                  <Label htmlFor="email" className="text-sm font-semibold text-foreground">Email Address *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => updateFormData("email", e.target.value)}
+                    placeholder="Enter email address"
+                    data-testid="input-email"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    required
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex justify-end">
-              <Button onClick={handleNext} className="btn-primary" data-testid="button-step-1-next">
+            
+            <div className="flex justify-end pt-6">
+              <Button 
+                onClick={handleNext} 
+                className="px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105" 
+                data-testid="button-step-1-next"
+              >
                 Next Step <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </div>
@@ -310,238 +329,265 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
 
         {/* Step 2: Advanced Info */}
         {currentStep === 2 && (
-          <div className="space-y-6" data-testid="form-step-2">
-            <h3 className="text-lg font-semibold text-foreground">Advanced Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="priority">Priority</Label>
-                <Select value={formData.priority} onValueChange={(value) => updateFormData("priority", value)}>
-                  <SelectTrigger data-testid="select-priority">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="low">Low</SelectItem>
-                  </SelectContent>
-                </Select>
+          <div className="pb-6" data-testid="form-step-2">
+            <div className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">2</span>
+                </div>
+                <h3 className="text-xl font-bold text-foreground">Advanced Information</h3>
               </div>
-              <div>
-                <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value) => updateFormData("status", value)}>
-                  <SelectTrigger data-testid="select-status">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="priority" className="text-sm font-semibold text-foreground">Priority</Label>
+                  <Select value={formData.priority} onValueChange={(value) => updateFormData("priority", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-priority">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="status" className="text-sm font-semibold text-foreground">Status</Label>
+                  <Select value={formData.status} onValueChange={(value) => updateFormData("status", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="gender" className="text-sm font-semibold text-foreground">Gender</Label>
+                  <Select value={formData.gender} onValueChange={(value) => updateFormData("gender", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-gender">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dob" className="text-sm font-semibold text-foreground">Date of Birth</Label>
+                  <Input
+                    id="dob"
+                    type="date"
+                    value={formData.dateOfBirth}
+                    onChange={(e) => updateFormData("dateOfBirth", e.target.value)}
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-dob"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="height" className="text-sm font-semibold text-foreground">Height</Label>
+                  <Select value={formData.height} onValueChange={(value) => updateFormData("height", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-height">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5.0-5.2">5'0" - 5'2"</SelectItem>
+                      <SelectItem value="5.3-5.5">5'3" - 5'5"</SelectItem>
+                      <SelectItem value="5.6-5.8">5'6" - 5'8"</SelectItem>
+                      <SelectItem value="5.9-6.0">5'9" - 6'0"</SelectItem>
+                      <SelectItem value="6.1-6.3">6'1" - 6'3"</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="maritalStatus" className="text-sm font-semibold text-foreground">Marital Status</Label>
+                  <Select value={formData.maritalStatus} onValueChange={(value) => updateFormData("maritalStatus", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-marital-status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="single">Single</SelectItem>
+                      <SelectItem value="divorced">Divorced</SelectItem>
+                      <SelectItem value="widowed">Widowed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="profession" className="text-sm font-semibold text-foreground">Profession</Label>
+                  <Input
+                    id="profession"
+                    value={formData.profession}
+                    onChange={(e) => updateFormData("profession", e.target.value)}
+                    placeholder="Enter profession"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-profession"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="jobType" className="text-sm font-semibold text-foreground">Job Type</Label>
+                  <Select value={formData.jobType} onValueChange={(value) => updateFormData("jobType", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-job-type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="government">Government</SelectItem>
+                      <SelectItem value="private">Private</SelectItem>
+                      <SelectItem value="business">Business</SelectItem>
+                      <SelectItem value="freelance">Freelance</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="permanentCountry" className="text-sm font-semibold text-foreground">Permanent Country</Label>
+                  <Input
+                    id="permanentCountry"
+                    value={formData.permanentCountry}
+                    onChange={(e) => updateFormData("permanentCountry", e.target.value)}
+                    placeholder="Enter permanent country"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-permanent-country"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="permanentCity" className="text-sm font-semibold text-foreground">Permanent City</Label>
+                  <Input
+                    id="permanentCity"
+                    value={formData.permanentCity}
+                    onChange={(e) => updateFormData("permanentCity", e.target.value)}
+                    placeholder="Enter permanent city"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-permanent-city"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="presentCountry" className="text-sm font-semibold text-foreground">Present Country</Label>
+                  <Input
+                    id="presentCountry"
+                    value={formData.presentCountry}
+                    onChange={(e) => updateFormData("presentCountry", e.target.value)}
+                    placeholder="Enter present country"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-present-country"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="presentCity" className="text-sm font-semibold text-foreground">Present City</Label>
+                  <Input
+                    id="presentCity"
+                    value={formData.presentCity}
+                    onChange={(e) => updateFormData("presentCity", e.target.value)}
+                    placeholder="Enter present city"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-present-city"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="qualification" className="text-sm font-semibold text-foreground">Qualification</Label>
+                  <Input
+                    id="qualification"
+                    value={formData.qualification}
+                    onChange={(e) => updateFormData("qualification", e.target.value)}
+                    placeholder="Enter qualification"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-qualification"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="organization" className="text-sm font-semibold text-foreground">Organization</Label>
+                  <Input
+                    id="organization"
+                    value={formData.organization}
+                    onChange={(e) => updateFormData("organization", e.target.value)}
+                    placeholder="Enter organization"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-organization"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="religion" className="text-sm font-semibold text-foreground">Religion</Label>
+                  <Select value={formData.religion} onValueChange={(value) => updateFormData("religion", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-religion">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="islam">Islam</SelectItem>
+                      <SelectItem value="hinduism">Hinduism</SelectItem>
+                      <SelectItem value="christianity">Christianity</SelectItem>
+                      <SelectItem value="buddhism">Buddhism</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="socialTitle" className="text-sm font-semibold text-foreground">Social Title</Label>
+                  <Select value={formData.socialTitle} onValueChange={(value) => updateFormData("socialTitle", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-social-title">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mr">Mr.</SelectItem>
+                      <SelectItem value="mrs">Mrs.</SelectItem>
+                      <SelectItem value="ms">Ms.</SelectItem>
+                      <SelectItem value="dr">Dr.</SelectItem>
+                      <SelectItem value="prof">Prof.</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="profilePicture" className="text-sm font-semibold text-foreground">Profile Picture URL</Label>
+                  <Input
+                    id="profilePicture"
+                    value={formData.profilePicture}
+                    onChange={(e) => updateFormData("profilePicture", e.target.value)}
+                    placeholder="Enter profile picture URL"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-profile-picture"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="curriculumVitae" className="text-sm font-semibold text-foreground">CV/Resume URL</Label>
+                  <Input
+                    id="curriculumVitae"
+                    value={formData.curriculumVitae}
+                    onChange={(e) => updateFormData("curriculumVitae", e.target.value)}
+                    placeholder="Enter CV/Resume URL"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-curriculum-vitae"
+                  />
+                </div>
               </div>
-              <div>
-                <Label htmlFor="gender">Gender</Label>
-                <Select value={formData.gender} onValueChange={(value) => updateFormData("gender", value)}>
-                  <SelectTrigger data-testid="select-gender">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="dob">Date of Birth</Label>
-                <Input
-                  id="dob"
-                  type="date"
-                  value={formData.dateOfBirth}
-                  onChange={(e) => updateFormData("dateOfBirth", e.target.value)}
-                  data-testid="input-dob"
-                />
-              </div>
-              <div>
-                <Label htmlFor="height">Height</Label>
-                <Select value={formData.height} onValueChange={(value) => updateFormData("height", value)}>
-                  <SelectTrigger data-testid="select-height">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="5.0-5.2">5'0" - 5'2"</SelectItem>
-                    <SelectItem value="5.3-5.5">5'3" - 5'5"</SelectItem>
-                    <SelectItem value="5.6-5.8">5'6" - 5'8"</SelectItem>
-                    <SelectItem value="5.9-6.0">5'9" - 6'0"</SelectItem>
-                    <SelectItem value="6.1-6.3">6'1" - 6'3"</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="maritalStatus">Marital Status</Label>
-                <Select value={formData.maritalStatus} onValueChange={(value) => updateFormData("maritalStatus", value)}>
-                  <SelectTrigger data-testid="select-marital-status">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="single">Single</SelectItem>
-                    <SelectItem value="divorced">Divorced</SelectItem>
-                    <SelectItem value="widowed">Widowed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="profession">Profession</Label>
-                <Input
-                  id="profession"
-                  value={formData.profession}
-                  onChange={(e) => updateFormData("profession", e.target.value)}
-                  placeholder="Enter profession"
-                  data-testid="input-profession"
-                />
-              </div>
-              <div>
-                <Label htmlFor="jobType">Job Type</Label>
-                <Select value={formData.jobType} onValueChange={(value) => updateFormData("jobType", value)}>
-                  <SelectTrigger data-testid="select-job-type">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="government">Government</SelectItem>
-                    <SelectItem value="private">Private</SelectItem>
-                    <SelectItem value="business">Business</SelectItem>
-                    <SelectItem value="freelance">Freelance</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="permanentCountry">Permanent Country</Label>
-                <Input
-                  id="permanentCountry"
-                  value={formData.permanentCountry}
-                  onChange={(e) => updateFormData("permanentCountry", e.target.value)}
-                  placeholder="Enter permanent country"
-                  data-testid="input-permanent-country"
-                />
-              </div>
-              <div>
-                <Label htmlFor="permanentCity">Permanent City</Label>
-                <Input
-                  id="permanentCity"
-                  value={formData.permanentCity}
-                  onChange={(e) => updateFormData("permanentCity", e.target.value)}
-                  placeholder="Enter permanent city"
-                  data-testid="input-permanent-city"
-                />
-              </div>
-              <div>
-                <Label htmlFor="presentCountry">Present Country</Label>
-                <Input
-                  id="presentCountry"
-                  value={formData.presentCountry}
-                  onChange={(e) => updateFormData("presentCountry", e.target.value)}
-                  placeholder="Enter present country"
-                  data-testid="input-present-country"
-                />
-              </div>
-              <div>
-                <Label htmlFor="presentCity">Present City</Label>
-                <Input
-                  id="presentCity"
-                  value={formData.presentCity}
-                  onChange={(e) => updateFormData("presentCity", e.target.value)}
-                  placeholder="Enter present city"
-                  data-testid="input-present-city"
-                />
-              </div>
-              <div>
-                <Label htmlFor="qualification">Qualification</Label>
-                <Input
-                  id="qualification"
-                  value={formData.qualification}
-                  onChange={(e) => updateFormData("qualification", e.target.value)}
-                  placeholder="Enter qualification"
-                  data-testid="input-qualification"
-                />
-              </div>
-              <div>
-                <Label htmlFor="organization">Organization</Label>
-                <Input
-                  id="organization"
-                  value={formData.organization}
-                  onChange={(e) => updateFormData("organization", e.target.value)}
-                  placeholder="Enter organization"
-                  data-testid="input-organization"
-                />
-              </div>
-              <div>
-                <Label htmlFor="religion">Religion</Label>
-                <Select value={formData.religion} onValueChange={(value) => updateFormData("religion", value)}>
-                  <SelectTrigger data-testid="select-religion">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="islam">Islam</SelectItem>
-                    <SelectItem value="hinduism">Hinduism</SelectItem>
-                    <SelectItem value="christianity">Christianity</SelectItem>
-                    <SelectItem value="buddhism">Buddhism</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="socialTitle">Social Title</Label>
-                <Select value={formData.socialTitle} onValueChange={(value) => updateFormData("socialTitle", value)}>
-                  <SelectTrigger data-testid="select-social-title">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="mr">Mr.</SelectItem>
-                    <SelectItem value="mrs">Mrs.</SelectItem>
-                    <SelectItem value="ms">Ms.</SelectItem>
-                    <SelectItem value="dr">Dr.</SelectItem>
-                    <SelectItem value="prof">Prof.</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="profilePicture">Profile Picture URL</Label>
-                <Input
-                  id="profilePicture"
-                  value={formData.profilePicture}
-                  onChange={(e) => updateFormData("profilePicture", e.target.value)}
-                  placeholder="Enter profile picture URL"
-                  data-testid="input-profile-picture"
-                />
-              </div>
-              <div>
-                <Label htmlFor="curriculumVitae">CV/Resume URL</Label>
-                <Input
-                  id="curriculumVitae"
-                  value={formData.curriculumVitae}
-                  onChange={(e) => updateFormData("curriculumVitae", e.target.value)}
-                  placeholder="Enter CV/Resume URL"
-                  data-testid="input-curriculum-vitae"
+
+              <div className="space-y-2 mt-6">
+                <Label htmlFor="requirements" className="text-sm font-semibold text-foreground">Requirements</Label>
+                <Textarea
+                  id="requirements"
+                  value={formData.requirements}
+                  onChange={(e) => updateFormData("requirements", e.target.value)}
+                  placeholder="Describe client requirements..."
+                  className="h-24 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                  data-testid="textarea-requirements"
                 />
               </div>
             </div>
-
-            <div>
-              <Label htmlFor="requirements">Requirements</Label>
-              <Textarea
-                id="requirements"
-                value={formData.requirements}
-                onChange={(e) => updateFormData("requirements", e.target.value)}
-                placeholder="Describe client requirements..."
-                className="h-24"
-                data-testid="textarea-requirements"
-              />
-            </div>
-
-            <div className="flex justify-between">
-              <Button variant="outline" onClick={handlePrevious} data-testid="button-step-2-prev">
+            
+            <div className="flex justify-between pt-6">
+              <Button 
+                variant="outline" 
+                onClick={handlePrevious} 
+                className="px-6 py-3 border-2 border-input hover:border-primary/50 hover:bg-primary/5 font-semibold rounded-lg transition-all duration-200"
+                data-testid="button-step-2-prev"
+              >
                 <ArrowLeft className="h-4 w-4 mr-2" /> Previous
               </Button>
-              <Button onClick={handleNext} className="btn-primary" data-testid="button-step-2-next">
+              <Button 
+                onClick={handleNext} 
+                className="px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105" 
+                data-testid="button-step-2-next"
+              >
                 Next Step <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </div>
@@ -550,83 +596,99 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
 
         {/* Step 3: Payment Info */}
         {currentStep === 3 && (
-          <div className="space-y-6" data-testid="form-step-3">
-            <h3 className="text-lg font-semibold text-foreground">Payment Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="package">Package Type</Label>
-                <Select value={formData.packageType} onValueChange={(value) => updateFormData("packageType", value)}>
-                  <SelectTrigger data-testid="select-package">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="premium">Premium Package - ৳50,000</SelectItem>
-                    <SelectItem value="standard">Standard Package - ৳30,000</SelectItem>
-                    <SelectItem value="basic">Basic Package - ৳15,000</SelectItem>
-                  </SelectContent>
-                </Select>
+          <div className="pb-6" data-testid="form-step-3">
+            <div className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">3</span>
+                </div>
+                <h3 className="text-xl font-bold text-foreground">Payment Information</h3>
               </div>
-              <div>
-                <Label htmlFor="payment-method">Payment Method</Label>
-                <Select value={formData.paymentMethod} onValueChange={(value) => updateFormData("paymentMethod", value)}>
-                  <SelectTrigger data-testid="select-payment-method">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bank">Bank Transfer</SelectItem>
-                    <SelectItem value="mobile">Mobile Banking</SelectItem>
-                    <SelectItem value="cash">Cash</SelectItem>
-                    <SelectItem value="card">Credit Card</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="paid-amount">Paid Amount</Label>
-                <Input
-                  id="paid-amount"
-                  type="number"
-                  value={formData.paidAmount}
-                  onChange={(e) => updateFormData("paidAmount", Number(e.target.value))}
-                  placeholder="Enter paid amount"
-                  data-testid="input-paid-amount"
-                />
-              </div>
-              <div>
-                <Label htmlFor="discount">Discount Amount</Label>
-                <Input
-                  id="discount"
-                  type="number"
-                  value={formData.discountAmount}
-                  onChange={(e) => updateFormData("discountAmount", Number(e.target.value))}
-                  placeholder="Enter discount"
-                  data-testid="input-discount"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <Label htmlFor="marriage-fee">After Marriage Fee</Label>
-                <Input
-                  id="marriage-fee"
-                  type="number"
-                  value={formData.afterMarriageFee}
-                  onChange={(e) => updateFormData("afterMarriageFee", Number(e.target.value))}
-                  placeholder="Enter after marriage fee"
-                  data-testid="input-marriage-fee"
-                />
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="package" className="text-sm font-semibold text-foreground">Package Type</Label>
+                  <Select value={formData.packageType} onValueChange={(value) => updateFormData("packageType", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-package">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="premium">Premium Package - ৳50,000</SelectItem>
+                      <SelectItem value="standard">Standard Package - ৳30,000</SelectItem>
+                      <SelectItem value="basic">Basic Package - ৳15,000</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="payment-method" className="text-sm font-semibold text-foreground">Payment Method</Label>
+                  <Select value={formData.paymentMethod} onValueChange={(value) => updateFormData("paymentMethod", value)}>
+                    <SelectTrigger className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors" data-testid="select-payment-method">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bank">Bank Transfer</SelectItem>
+                      <SelectItem value="mobile">Mobile Banking</SelectItem>
+                      <SelectItem value="cash">Cash</SelectItem>
+                      <SelectItem value="card">Credit Card</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="paid-amount" className="text-sm font-semibold text-foreground">Paid Amount</Label>
+                  <Input
+                    id="paid-amount"
+                    type="number"
+                    value={formData.paidAmount}
+                    onChange={(e) => updateFormData("paidAmount", Number(e.target.value))}
+                    placeholder="Enter paid amount"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-paid-amount"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="discount" className="text-sm font-semibold text-foreground">Discount Amount</Label>
+                  <Input
+                    id="discount"
+                    type="number"
+                    value={formData.discountAmount}
+                    onChange={(e) => updateFormData("discountAmount", Number(e.target.value))}
+                    placeholder="Enter discount"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-discount"
+                  />
+                </div>
+                <div className="lg:col-span-2 space-y-2">
+                  <Label htmlFor="marriage-fee" className="text-sm font-semibold text-foreground">After Marriage Fee</Label>
+                  <Input
+                    id="marriage-fee"
+                    type="number"
+                    value={formData.afterMarriageFee}
+                    onChange={(e) => updateFormData("afterMarriageFee", Number(e.target.value))}
+                    placeholder="Enter after marriage fee"
+                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
+                    data-testid="input-marriage-fee"
+                  />
+                </div>
               </div>
             </div>
-
-            <div className="flex justify-between">
-              <Button variant="outline" onClick={handlePrevious} data-testid="button-step-3-prev">
+            
+            <div className="flex justify-between pt-6">
+              <Button 
+                variant="outline" 
+                onClick={handlePrevious} 
+                className="px-6 py-3 border-2 border-input hover:border-primary/50 hover:bg-primary/5 font-semibold rounded-lg transition-all duration-200"
+                data-testid="button-step-3-prev"
+              >
                 <ArrowLeft className="h-4 w-4 mr-2" /> Previous
               </Button>
               <Button 
                 onClick={handleSubmit} 
-                className="btn-secondary text-white"
+                className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 disabled={createTrafficMutation.isPending}
                 data-testid="button-submit-traffic"
               >
                 <CreditCard className="h-4 w-4 mr-2" />
-                Apply for Paid Client
+                {createTrafficMutation.isPending ? "Creating..." : "Apply for Paid Client"}
               </Button>
             </div>
           </div>
