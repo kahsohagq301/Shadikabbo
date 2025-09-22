@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Sidebar } from "@/components/sidebar";
+import { AppLayout } from "@/components/app-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -78,131 +78,128 @@ export default function Payment() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <Sidebar />
-      
-      <main className="flex-1">
-        <div className="p-6">
-          <div className="mb-6">
-            <div className="flex items-center gap-3 mb-2">
-              <DollarSign className="h-8 w-8 text-blue-600" />
-              <h1 className="text-3xl font-bold text-foreground" data-testid="text-payment-title">
-                Payment Requests
-              </h1>
-            </div>
-            <p className="text-muted-foreground" data-testid="text-payment-subtitle">
-              Manage pending payment requests from Traffic submissions
-            </p>
-            {!isSuperAdmin && (
-              <div className="mt-4 flex items-center gap-2 text-amber-600 bg-amber-50 p-3 rounded-lg">
-                <AlertCircle className="h-4 w-4" />
-                <span className="text-sm">
-                  Only Super Admin accounts can approve or cancel payment requests
-                </span>
-              </div>
-            )}
+    <AppLayout>
+      <div className="p-4">
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-1">
+            <DollarSign className="h-5 w-5 text-blue-600" />
+            <h1 className="text-xl font-semibold text-foreground" data-testid="text-payment-title">
+              Payment Requests
+            </h1>
           </div>
-
-          <Card>
-            <CardContent className="p-0">
-              {isLoading ? (
-                <div className="p-8 text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                  <p className="mt-4 text-muted-foreground">Loading payment requests...</p>
-                </div>
-              ) : paymentRequests.length === 0 ? (
-                <div className="p-8 text-center">
-                  <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Payment Requests</h3>
-                  <p className="text-gray-500">
-                    There are no pending payment requests at this time.
-                  </p>
-                </div>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead data-testid="header-date">Date</TableHead>
-                      <TableHead data-testid="header-name">Name</TableHead>
-                      <TableHead data-testid="header-package">Package</TableHead>
-                      <TableHead data-testid="header-paid-amount">Paid Amount</TableHead>
-                      <TableHead data-testid="header-total-amount">Total Amount</TableHead>
-                      <TableHead data-testid="header-payment-method">Payment Method</TableHead>
-                      <TableHead data-testid="header-status">Status</TableHead>
-                      {isSuperAdmin && <TableHead data-testid="header-actions">Actions</TableHead>}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paymentRequests.map((payment) => (
-                      <TableRow key={payment.id} data-testid={`row-payment-${payment.id}`}>
-                        <TableCell data-testid={`cell-date-${payment.id}`}>
-                          {payment.createdAt ? new Date(payment.createdAt).toLocaleDateString() : 'N/A'}
-                        </TableCell>
-                        <TableCell data-testid={`cell-name-${payment.id}`}>
-                          <div className="font-medium">{payment.trafficName}</div>
-                        </TableCell>
-                        <TableCell data-testid={`cell-package-${payment.id}`}>
-                          <Badge variant="outline">{payment.packageType}</Badge>
-                        </TableCell>
-                        <TableCell data-testid={`cell-paid-amount-${payment.id}`}>
-                          <div className="font-medium text-green-600">
-                            ${payment.paidAmount}
-                          </div>
-                        </TableCell>
-                        <TableCell data-testid={`cell-total-amount-${payment.id}`}>
-                          <div className="font-medium">
-                            ${payment.totalAmount}
-                          </div>
-                          {payment.dueAmount !== "0" && (
-                            <div className="text-sm text-orange-600">
-                              Due: ${payment.dueAmount}
-                            </div>
-                          )}
-                        </TableCell>
-                        <TableCell data-testid={`cell-payment-method-${payment.id}`}>
-                          <Badge variant="secondary">{payment.paymentMethod}</Badge>
-                        </TableCell>
-                        <TableCell data-testid={`cell-status-${payment.id}`}>
-                          <Badge variant="outline" className="capitalize">
-                            {payment.status}
-                          </Badge>
-                        </TableCell>
-                        {isSuperAdmin && (
-                          <TableCell data-testid={`cell-actions-${payment.id}`}>
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                variant="default"
-                                onClick={() => handleAccept(payment.id)}
-                                disabled={acceptPaymentMutation.isPending}
-                                className="bg-green-600 hover:bg-green-700 text-white"
-                                data-testid={`button-accept-${payment.id}`}
-                              >
-                                <Check className="h-3 w-3 mr-1" />
-                                Accept
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => handleCancel(payment.id)}
-                                disabled={cancelPaymentMutation.isPending}
-                                data-testid={`button-cancel-${payment.id}`}
-                              >
-                                <X className="h-3 w-3 mr-1" />
-                                Cancel
-                              </Button>
-                            </div>
-                          </TableCell>
-                        )}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </CardContent>
-          </Card>
+          <p className="text-sm text-muted-foreground" data-testid="text-payment-subtitle">
+            Manage pending payment requests from Traffic submissions
+          </p>
+          {!isSuperAdmin && (
+            <div className="mt-3 flex items-center gap-2 text-amber-600 bg-amber-50 p-2 rounded text-sm">
+              <AlertCircle className="h-4 w-4" />
+              <span>
+                Only Super Admin accounts can approve or cancel payment requests
+              </span>
+            </div>
+          )}
         </div>
-      </main>
-    </div>
+
+        <Card>
+          <CardContent className="p-0">
+            {isLoading ? (
+              <div className="p-6 text-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-3 text-sm text-muted-foreground">Loading payment requests...</p>
+              </div>
+            ) : paymentRequests.length === 0 ? (
+              <div className="p-6 text-center">
+                <DollarSign className="h-10 w-10 text-gray-400 mx-auto mb-3" />
+                <h3 className="text-base font-medium text-gray-900 mb-1">No Payment Requests</h3>
+                <p className="text-sm text-gray-500">
+                  There are no pending payment requests at this time.
+                </p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-xs font-medium" data-testid="header-date">Date</TableHead>
+                    <TableHead className="text-xs font-medium" data-testid="header-name">Name</TableHead>
+                    <TableHead className="text-xs font-medium" data-testid="header-package">Package</TableHead>
+                    <TableHead className="text-xs font-medium" data-testid="header-paid-amount">Paid Amount</TableHead>
+                    <TableHead className="text-xs font-medium" data-testid="header-total-amount">Total Amount</TableHead>
+                    <TableHead className="text-xs font-medium" data-testid="header-payment-method">Payment Method</TableHead>
+                    <TableHead className="text-xs font-medium" data-testid="header-status">Status</TableHead>
+                    {isSuperAdmin && <TableHead className="text-xs font-medium" data-testid="header-actions">Actions</TableHead>}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paymentRequests.map((payment) => (
+                    <TableRow key={payment.id} data-testid={`row-payment-${payment.id}`}>
+                      <TableCell className="py-2 text-xs" data-testid={`cell-date-${payment.id}`}>
+                        {payment.createdAt ? new Date(payment.createdAt).toLocaleDateString() : 'N/A'}
+                      </TableCell>
+                      <TableCell className="py-2" data-testid={`cell-name-${payment.id}`}>
+                        <div className="text-sm font-medium">{payment.trafficName}</div>
+                      </TableCell>
+                      <TableCell className="py-2" data-testid={`cell-package-${payment.id}`}>
+                        <Badge variant="outline" className="text-xs">{payment.packageType}</Badge>
+                      </TableCell>
+                      <TableCell className="py-2" data-testid={`cell-paid-amount-${payment.id}`}>
+                        <div className="text-sm font-medium text-green-600">
+                          ${payment.paidAmount}
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-2" data-testid={`cell-total-amount-${payment.id}`}>
+                        <div className="text-sm font-medium">
+                          ${payment.totalAmount}
+                        </div>
+                        {payment.dueAmount !== "0" && (
+                          <div className="text-xs text-orange-600">
+                            Due: ${payment.dueAmount}
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="py-2" data-testid={`cell-payment-method-${payment.id}`}>
+                        <Badge variant="secondary" className="text-xs">{payment.paymentMethod}</Badge>
+                      </TableCell>
+                      <TableCell className="py-2" data-testid={`cell-status-${payment.id}`}>
+                        <Badge variant="outline" className="text-xs capitalize">
+                          {payment.status}
+                        </Badge>
+                      </TableCell>
+                      {isSuperAdmin && (
+                        <TableCell className="py-2" data-testid={`cell-actions-${payment.id}`}>
+                          <div className="flex gap-1">
+                            <Button
+                              size="sm"
+                              variant="default"
+                              onClick={() => handleAccept(payment.id)}
+                              disabled={acceptPaymentMutation.isPending}
+                              className="h-7 px-2 text-xs bg-green-600 hover:bg-green-700 text-white"
+                              data-testid={`button-accept-${payment.id}`}
+                            >
+                              <Check className="h-3 w-3 mr-1" />
+                              Accept
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => handleCancel(payment.id)}
+                              disabled={cancelPaymentMutation.isPending}
+                              className="h-7 px-2 text-xs"
+                              data-testid={`button-cancel-${payment.id}`}
+                            >
+                              <X className="h-3 w-3 mr-1" />
+                              Cancel
+                            </Button>
+                          </div>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </AppLayout>
   );
 }
