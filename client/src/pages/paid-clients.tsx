@@ -176,35 +176,34 @@ export default function PaidClients() {
   return (
     <AppLayout>
       <div className="p-6">
-        {/* Professional Filters Section */}
-        <Card className="mb-6 border-border shadow-lg">
-          <CardHeader className="pb-6 bg-gradient-to-r from-slate-50 to-blue-50/30">
-            <CardTitle className="text-xl font-bold text-slate-800 flex items-center gap-3">
-              <Search className="h-6 w-6 text-blue-600" />
+        {/* Compact Search & Filters Section */}
+        <Card className="mb-4 border-border">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
+              <Search className="h-4 w-4 text-primary" />
               Search & Filter Clients
             </CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">Use the filters below to find specific clients, then click "Filter Now" to apply</p>
           </CardHeader>
-          <CardContent className="space-y-6 p-6">
-            {/* Manual Search */}
+          <CardContent className="space-y-4 p-4">
+            {/* Compact Search */}
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search clients (name, contact, profession, etc.)"
                 value={formFilters.q || ""}
                 onChange={(e) => handleFormFilterChange("q", e.target.value)}
-                className="pl-12 py-3 text-base border-2 border-slate-200 focus:border-blue-500 rounded-lg shadow-sm"
+                className="pl-9 py-2 text-sm border border-input focus:border-primary rounded-md"
                 data-testid="input-search"
               />
             </div>
 
-            {/* All Filter Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Gender</label>
+            {/* Compact Filter Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Gender</label>
                 <Select value={formFilters.gender || ""} onValueChange={(value) => handleFormFilterChange("gender", value)}>
-                  <SelectTrigger className="border-2 border-slate-200 focus:border-blue-500 rounded-lg" data-testid="select-gender">
-                    <SelectValue placeholder="Select Gender" />
+                  <SelectTrigger className="h-8 text-sm" data-testid="select-gender">
+                    <SelectValue placeholder="All" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Genders</SelectItem>
@@ -214,44 +213,44 @@ export default function PaidClients() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Birth Year</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Birth Year</label>
                 <Input
-                  placeholder="e.g., 1990"
+                  placeholder="1990"
                   value={formFilters.birthYear || ""}
                   onChange={(e) => handleFormFilterChange("birthYear", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-birth-year"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Age</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Age</label>
                 <Input
-                  placeholder="e.g., 30"
+                  placeholder="30"
                   value={formFilters.age || ""}
                   onChange={(e) => handleFormFilterChange("age", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-age"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Height</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Height</label>
                 <Input
-                  placeholder="e.g., 5 feet 8 inches"
+                  placeholder="5'8"
                   value={formFilters.height || ""}
                   onChange={(e) => handleFormFilterChange("height", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-height"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Marital Status</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Marital Status</label>
                 <Select value={formFilters.maritalStatus || ""} onValueChange={(value) => handleFormFilterChange("maritalStatus", value)}>
-                  <SelectTrigger className="border-2 border-slate-200 focus:border-blue-500 rounded-lg" data-testid="select-marital-status">
-                    <SelectValue placeholder="Select Status" />
+                  <SelectTrigger className="h-8 text-sm" data-testid="select-marital-status">
+                    <SelectValue placeholder="All" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
@@ -262,90 +261,92 @@ export default function PaidClients() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Qualification</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Qualification</label>
                 <Input
-                  placeholder="e.g., Masters"
+                  placeholder="Masters"
                   value={formFilters.qualification || ""}
                   onChange={(e) => handleFormFilterChange("qualification", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-qualification"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Profession</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Profession</label>
                 <Input
-                  placeholder="e.g., Engineer"
+                  placeholder="Engineer"
                   value={formFilters.profession || ""}
                   onChange={(e) => handleFormFilterChange("profession", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-profession"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Permanent Country</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Permanent Country</label>
                 <Input
-                  placeholder="e.g., India"
+                  placeholder="India"
                   value={formFilters.permanentCountry || ""}
                   onChange={(e) => handleFormFilterChange("permanentCountry", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-permanent-country"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Permanent City</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Permanent City</label>
                 <Input
-                  placeholder="e.g., Mumbai"
+                  placeholder="Mumbai"
                   value={formFilters.permanentCity || ""}
                   onChange={(e) => handleFormFilterChange("permanentCity", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-permanent-city"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Present Country</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Present Country</label>
                 <Input
-                  placeholder="e.g., USA"
+                  placeholder="USA"
                   value={formFilters.presentCountry || ""}
                   onChange={(e) => handleFormFilterChange("presentCountry", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-present-country"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Present City</label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground">Present City</label>
                 <Input
-                  placeholder="e.g., New York"
+                  placeholder="New York"
                   value={formFilters.presentCity || ""}
                   onChange={(e) => handleFormFilterChange("presentCity", e.target.value)}
-                  className="border-2 border-slate-200 focus:border-blue-500 rounded-lg"
+                  className="h-8 text-sm"
                   data-testid="input-present-city"
                 />
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-200">
+            {/* Compact Action Buttons */}
+            <div className="flex items-center justify-end gap-2 pt-2">
               <Button
                 variant="outline"
+                size="sm"
                 onClick={handleClearFilters}
-                className="px-6 py-3 text-slate-600 border-2 border-slate-300 hover:bg-slate-50 hover:border-slate-400 rounded-lg font-semibold transition-all duration-200"
+                className="px-3 py-1 text-sm"
                 data-testid="button-clear-filters"
               >
-                <FilterX className="h-4 w-4 mr-2" />
+                <FilterX className="h-3 w-3 mr-1" />
                 Clear
               </Button>
               <Button
+                size="sm"
                 onClick={handleFilterNow}
-                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                className="px-4 py-1 text-sm"
                 data-testid="button-filter-now"
               >
-                <RefreshCw className="h-4 w-4 mr-2" />
+                <RefreshCw className="h-3 w-3 mr-1" />
                 Filter Now
               </Button>
             </div>
