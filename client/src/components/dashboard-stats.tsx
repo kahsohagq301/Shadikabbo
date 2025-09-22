@@ -53,30 +53,30 @@ export function DashboardStats({ stats, isLoading }: DashboardStatsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
       {statItems.map((item, index) => (
-        <Card key={index} className={`stat-card border-2 ${item.borderColor} hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-white to-gray-50/50`}>
-          <CardContent className="p-6">
+        <Card key={index} className={`stat-card border ${item.borderColor} hover:shadow-md transition-all duration-200 bg-gradient-to-br from-white to-gray-50/50`}>
+          <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-muted-foreground text-sm font-semibold uppercase tracking-wide mb-2" data-testid={`text-stat-title-${index}`}>
+                <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide mb-1" data-testid={`text-stat-title-${index}`}>
                   {item.title}
                 </p>
                 {isLoading ? (
-                  <Skeleton className="h-8 w-16 mt-1" />
+                  <Skeleton className="h-6 w-12 mt-1" />
                 ) : (
-                  <p className="text-3xl font-bold text-foreground mb-2" data-testid={`text-stat-value-${index}`}>
+                  <p className="text-xl font-bold text-foreground mb-1" data-testid={`text-stat-value-${index}`}>
                     {item.value}
                   </p>
                 )}
-                <div className="flex items-center text-sm text-green-600 font-medium">
-                  <TrendingUp className="h-4 w-4 mr-1" />
+                <div className="flex items-center text-xs text-green-600 font-medium">
+                  <TrendingUp className="h-3 w-3 mr-1" />
                   <span data-testid={`text-stat-change-${index}`}>{item.change}</span>
-                  <span className="text-muted-foreground ml-1">from last month</span>
+                  <span className="text-muted-foreground ml-1">vs last month</span>
                 </div>
               </div>
-              <div className={`w-14 h-14 ${item.iconBg} rounded-2xl flex items-center justify-center shadow-lg ring-1 ring-white/20`}>
-                <item.icon className={`${item.iconColor} h-7 w-7`} />
+              <div className={`w-10 h-10 ${item.iconBg} rounded-lg flex items-center justify-center shadow-sm ring-1 ring-white/20`}>
+                <item.icon className={`${item.iconColor} h-5 w-5`} />
               </div>
             </div>
           </CardContent>
