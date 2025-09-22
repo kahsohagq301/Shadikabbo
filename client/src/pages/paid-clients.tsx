@@ -160,15 +160,6 @@ export default function PaidClients() {
     return (
       <AppLayout>
         <div className="p-6">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-foreground mb-2" data-testid="text-paid-clients-title">
-              Paid Clients
-            </h1>
-            <p className="text-muted-foreground" data-testid="text-paid-clients-subtitle">
-              Manage clients with accepted payments
-            </p>
-          </div>
-          
           <Card className="border-border">
             <CardContent className="p-6">
               <div className="text-center text-muted-foreground">Loading paid clients...</div>
@@ -185,18 +176,6 @@ export default function PaidClients() {
   return (
     <AppLayout>
       <div className="p-6">
-        <div className="mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2" data-testid="text-paid-clients-title">
-              Paid Clients
-            </h1>
-            <p className="text-muted-foreground" data-testid="text-paid-clients-subtitle">
-              Manage clients with accepted payments
-              {!isSuperAdmin && " (View Only - Your Assigned Clients)"}
-            </p>
-          </div>
-        </div>
-
         {/* Professional Filters Section */}
         <Card className="mb-6 border-border shadow-lg">
           <CardHeader className="pb-6 bg-gradient-to-r from-slate-50 to-blue-50/30">
