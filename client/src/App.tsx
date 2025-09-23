@@ -11,6 +11,7 @@ import Traffic from "@/pages/traffic";
 import Account from "@/pages/account";
 import Payment from "@/pages/payment";
 import PaidClients from "@/pages/paid-clients";
+import Settings from "@/pages/settings";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
       <ProtectedRoute path="/payment" component={Payment} />
       <ProtectedRoute path="/paid-clients" component={PaidClients} />
       <ProtectedRoute path="/account" component={Account} />
+      <ProtectedRoute path="/settings" component={Settings} />
       <Route path="/auth" component={LoginPage} />
       <Route component={NotFound} />
     </Switch>
