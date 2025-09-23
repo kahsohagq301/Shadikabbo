@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, ArrowRight, CreditCard, X } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useSettings } from "@/hooks/use-settings";
 import { cn } from "@/lib/utils";
 
 interface AddTrafficModalProps {
@@ -54,6 +55,7 @@ interface TrafficForm {
 
 export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
   const { toast } = useToast();
+  const { getValuesByCategory, isLoading: settingsLoading } = useSettings();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<TrafficForm>({
     name: "",
@@ -346,9 +348,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="high">High</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="low">Low</SelectItem>
+                      {getValuesByCategory("priority").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase()}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -359,9 +363,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="inactive">Inactive</SelectItem>
+                      {getValuesByCategory("status").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase()}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -372,8 +378,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
+                      {getValuesByCategory("gender").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase()}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -395,11 +404,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="5.0-5.2">5'0" - 5'2"</SelectItem>
-                      <SelectItem value="5.3-5.5">5'3" - 5'5"</SelectItem>
-                      <SelectItem value="5.6-5.8">5'6" - 5'8"</SelectItem>
-                      <SelectItem value="5.9-6.0">5'9" - 6'0"</SelectItem>
-                      <SelectItem value="6.1-6.3">6'1" - 6'3"</SelectItem>
+                      {getValuesByCategory("height").map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -410,9 +419,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="single">Single</SelectItem>
-                      <SelectItem value="divorced">Divorced</SelectItem>
-                      <SelectItem value="widowed">Widowed</SelectItem>
+                      {getValuesByCategory("maritalStatus").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase()}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -434,10 +445,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="government">Government</SelectItem>
-                      <SelectItem value="private">Private</SelectItem>
-                      <SelectItem value="business">Business</SelectItem>
-                      <SelectItem value="freelance">Freelance</SelectItem>
+                      {getValuesByCategory("jobType").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase()}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -514,11 +526,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="islam">Islam</SelectItem>
-                      <SelectItem value="hinduism">Hinduism</SelectItem>
-                      <SelectItem value="christianity">Christianity</SelectItem>
-                      <SelectItem value="buddhism">Buddhism</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      {getValuesByCategory("religion").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase()}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -529,11 +541,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="mr">Mr.</SelectItem>
-                      <SelectItem value="mrs">Mrs.</SelectItem>
-                      <SelectItem value="ms">Ms.</SelectItem>
-                      <SelectItem value="dr">Dr.</SelectItem>
-                      <SelectItem value="prof">Prof.</SelectItem>
+                      {getValuesByCategory("socialTitle").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase()}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -613,9 +625,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="premium">Premium Package - ৳50,000</SelectItem>
-                      <SelectItem value="standard">Standard Package - ৳30,000</SelectItem>
-                      <SelectItem value="basic">Basic Package - ৳15,000</SelectItem>
+                      {getValuesByCategory("packageType").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase().split(' ')[0]}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -626,10 +640,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="bank">Bank Transfer</SelectItem>
-                      <SelectItem value="mobile">Mobile Banking</SelectItem>
-                      <SelectItem value="cash">Cash</SelectItem>
-                      <SelectItem value="card">Credit Card</SelectItem>
+                      {getValuesByCategory("paymentMethod").map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase().replace(' ', '_')}>
+                          {option}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
