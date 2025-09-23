@@ -1,0 +1,93 @@
+🔧 Settings Section – Configuration Instructions
+Hello, The Settings menu option is already added, but no system is configured yet. Please implement the following logic:
+
+1. Purpose of Settings
+The Settings section will control all selection menu options used across the system.
+
+From here, Admin can add, edit, or delete the values that appear in dropdowns (selection menus) in both:
+
+Traffic → Add Traffic form
+
+Filtering sections
+
+2. Selection Menus to be Managed from Settings
+Advanced Info (Traffic Form)
+Priority (Selection menu)
+
+Status (Selection menu)
+
+Profession (Selection menu)
+
+Job Type (Selection menu)
+
+Marital Status (Selection menu)
+
+Gender (Selection menu)
+
+Permanent Country (Selection menu)
+
+Permanent City (Selection menu)
+
+Present Country (Selection menu)
+
+Present City (Selection menu)
+
+Height (Selection menu)
+
+Qualification (Selection menu)
+
+Organization (Selection menu)
+
+Religion (Selection menu)
+
+Social Title (Selection menu)
+
+Payment Info (Traffic Form)
+Package Type (Selection menu)
+
+Payment Method (Selection menu)
+
+3. System Logic
+Detection
+
+All dropdown fields that are common between the Add Traffic form and Filtering section must be detected and linked.
+
+Example: If “Profession” is updated in Settings, it should update in both the form and the filtering section automatically.
+
+Add Option
+
+Admin can add new values (e.g., new Profession, new City, new Qualification).
+
+Once added, the new option should immediately appear in the related dropdowns.
+
+Delete Option
+
+Admin can delete any previously added option.
+
+Once deleted, it should be removed from all related dropdowns.
+
+Display
+
+All existing options must be listed in the Settings section under their respective categories.
+
+Example: Under “Profession” → show all professions currently available, with options to Add New or Delete.
+
+4. Role-Based Access
+Super Admin → Full access (Add, Delete, View).
+
+Other Roles → View only (cannot add or delete).
+
+5. UI/UX Requirements
+Settings page should be clean, professional, and compact.
+
+Each category (Profession, City, Qualification, etc.) should be displayed in a card or collapsible section.
+
+Each section must have:
+
+List of existing options
+
+Add New button
+
+Delete button beside each option
+
+✅ Please configure the Settings section so that all dropdown values across the system are centrally managed from here. This will ensure consistency and easy updates.
