@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
-import { insertTrafficSchema, insertPaymentSchema, insertUserSchema, userSafeUpdateSchema, userAdminUpdateSchema } from "@shared/schema";
+import { insertTrafficSchema, insertPaymentSchema, insertUserSchema, userSafeUpdateSchema, userAdminUpdateSchema, insertSettingSchema, updateSettingSchema } from "@shared/schema";
 import { hashPassword } from "./security";
 
 // Middleware to block disabled users
@@ -324,7 +324,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const [data, total] = await Promise.all([
         storage.getPaidClients({ page: pageNum, pageSize: sizeNum, ...filters }, req.user!),
-        storage.getPaidClientsCount(filters, req.user),
+        storage.getPaidClientsCount(filters, req.user!),
       ]);
 
       res.json({
@@ -354,6 +354,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error updating paid client:', error);
       const zErr = error?.issues ? 422 : 400;
       res.status(zErr).json({ message: "Failed to update client", error });
+    }
+  });
+
+  // Settings routes
+  app.get("/api/settings", requireEnabledUser, async (req, res) => {
+    try {
+      const { category } = req.query as { category?: string };
+      let settings;
+      
+      if (category) {
+        settings = await storage.getSettingsByCategory(category);
+      } else {
+        settings = await storage.getAllSettings();
+      }
+      
+      // Group settings by category for easier frontend usage
+      const groupedSettings = settings.reduce((acc, setting) => {
+        if (!acc[setting.category]) {
+          acc[setting.category] = [];
+        }
+        acc[setting.category].push(setting);
+        return acc;
+      }, {} as Record<string, any[]>);
+      
+      res.json(groupedSettings);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch settings", error });
+    }
+  });
+
+  app.post("/api/settings", requireEnabledUser, async (req, res) => {
+    // Only super_admin can create settings
+    if (req.user?.role !== "super_admin") {
+      return res.status(403).json({ message: "Only Super Admin can create settings" });
+    }
+    
+    try {
+      const settingData = insertSettingSchema.parse({
+        ...req.body,
+        createdBy: req.user?.id,
+      });
+      
+      const newSetting = await storage.createSetting(settingData);
+      res.status(201).json(newSetting);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid setting data", error });
+    }
+  });
+
+  app.put("/api/settings/:id", requireEnabledUser, async (req, res) => {
+    // Only super_admin can update settings
+    if (req.user?.role !== "super_admin") {
+      return res.status(403).json({ message: "Only Super Admin can update settings" });
+    }
+    
+    try {
+      const settingData = updateSettingSchema.parse(req.body);
+      const updatedSetting = await storage.updateSetting(req.params.id, settingData);
+      res.json(updatedSetting);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update setting", error });
+    }
+  });
+
+  app.delete("/api/settings/:id", requireEnabledUser, async (req, res) => {
+    // Only super_admin can delete settings
+    if (req.user?.role !== "super_admin") {
+      return res.status(403).json({ message: "Only Super Admin can delete settings" });
+    }
+    
+    try {
+      await storage.deleteSetting(req.params.id);
+      res.sendStatus(204);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete setting", error });
     }
   });
 

@@ -1,4 +1,4 @@
-import { users, traffic, payments, type User, type InsertUser, type Traffic, type InsertTraffic, type Payment, type InsertPayment, type PaymentRequest, type UpdatePaymentStatus, type PaidClientWithPayment } from "@shared/schema";
+import { users, traffic, payments, settings, type User, type InsertUser, type Traffic, type InsertTraffic, type Payment, type InsertPayment, type PaymentRequest, type UpdatePaymentStatus, type PaidClientWithPayment, type Setting, type InsertSetting, type UpdateSetting } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, count, sql, and, or, ilike, asc } from "drizzle-orm";
 import session from "express-session";
@@ -69,6 +69,13 @@ export interface IStorage {
   getTrafficCount(): Promise<number>;
   getPaidClientsCountForStats(): Promise<number>;
   getTotalPayments(): Promise<number>;
+  
+  // Settings methods
+  getAllSettings(): Promise<Setting[]>;
+  getSettingsByCategory(category: string): Promise<Setting[]>;
+  createSetting(setting: InsertSetting): Promise<Setting>;
+  updateSetting(id: string, setting: UpdateSetting): Promise<Setting>;
+  deleteSetting(id: string): Promise<void>;
   
   sessionStore: Store;
 }
@@ -449,6 +456,46 @@ export class DatabaseStorage implements IStorage {
   async getTotalPayments(): Promise<number> {
     const result = await db.select().from(payments);
     return result.reduce((total, payment) => total + Number(payment.paidAmount), 0);
+  }
+
+  async getAllSettings(): Promise<Setting[]> {
+    return await db.select().from(settings)
+      .where(eq(settings.isActive, true))
+      .orderBy(asc(settings.category), asc(settings.displayOrder));
+  }
+
+  async getSettingsByCategory(category: string): Promise<Setting[]> {
+    return await db.select().from(settings)
+      .where(and(eq(settings.category, category), eq(settings.isActive, true)))
+      .orderBy(asc(settings.displayOrder));
+  }
+
+  async createSetting(settingData: InsertSetting): Promise<Setting> {
+    const [setting] = await db
+      .insert(settings)
+      .values(settingData)
+      .returning();
+    return setting;
+  }
+
+  async updateSetting(id: string, settingData: UpdateSetting): Promise<Setting> {
+    const [setting] = await db
+      .update(settings)
+      .set({ ...settingData, updatedAt: new Date() })
+      .where(eq(settings.id, id))
+      .returning();
+    if (!setting) {
+      throw new Error('Setting not found');
+    }
+    return setting;
+  }
+
+  async deleteSetting(id: string): Promise<void> {
+    const settingToDelete = await db.select().from(settings).where(eq(settings.id, id));
+    if (settingToDelete.length === 0) {
+      throw new Error('Setting not found');
+    }
+    await db.delete(settings).where(eq(settings.id, id));
   }
 
   async ensureDefaultAdmin(): Promise<void> {
