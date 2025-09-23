@@ -13,7 +13,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { insertSettingSchema } from "@shared/schema";
+import { insertSettingSchema, type Setting } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Plus, Edit, Trash2, Settings as SettingsIcon } from "lucide-react";
 import { AppLayout } from "@/components/app-layout";
@@ -51,7 +51,7 @@ export default function Settings() {
   const { toast } = useToast();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedSetting, setSelectedSetting] = useState<any>(null);
+  const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
 
   // Only super admin can access settings
   const isSuperAdmin = user?.role === 'super_admin';
