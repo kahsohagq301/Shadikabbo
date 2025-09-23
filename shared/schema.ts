@@ -62,6 +62,17 @@ export const payments = pgTable("payments", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const settings = pgTable("settings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  category: text("category").notNull(),
+  value: text("value").notNull(),
+  displayOrder: integer("display_order").default(0),
+  isActive: boolean("is_active").default(true),
+  createdBy: varchar("created_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -133,6 +144,45 @@ export const updatePaymentStatusSchema = z.object({
   status: z.enum(["pending", "accepted", "cancelled"]),
 });
 
+export const insertSettingSchema = createInsertSchema(settings).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  category: z.enum([
+    "priority",
+    "status", 
+    "profession",
+    "jobType",
+    "maritalStatus",
+    "gender",
+    "permanentCountry",
+    "permanentCity",
+    "presentCountry",
+    "presentCity",
+    "height",
+    "qualification",
+    "organization",
+    "religion",
+    "socialTitle",
+    "packageType",
+    "paymentMethod"
+  ]),
+  value: z.string().min(1, "Value is required"),
+  displayOrder: z.number().default(0),
+  isActive: z.boolean().default(true),
+});
+
+export const updateSettingSchema = createInsertSchema(settings).pick({
+  value: true,
+  displayOrder: true,
+  isActive: true,
+}).extend({
+  value: z.string().min(1, "Value is required"),
+  displayOrder: z.number(),
+  isActive: z.boolean(),
+}).partial();
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertTraffic = z.infer<typeof insertTrafficSchema>;
@@ -140,6 +190,9 @@ export type Traffic = typeof traffic.$inferSelect;
 export type InsertPayment = z.infer<typeof insertPaymentSchema>;
 export type Payment = typeof payments.$inferSelect;
 export type UpdatePaymentStatus = z.infer<typeof updatePaymentStatusSchema>;
+export type InsertSetting = z.infer<typeof insertSettingSchema>;
+export type Setting = typeof settings.$inferSelect;
+export type UpdateSetting = z.infer<typeof updateSettingSchema>;
 
 // Extended types for UI components
 export interface PaymentRequest extends Payment {
