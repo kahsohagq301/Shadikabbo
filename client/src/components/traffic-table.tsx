@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ConfirmationDialog, useConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -19,6 +20,7 @@ interface TrafficRecord {
 
 export function TrafficTable() {
   const { toast } = useToast();
+  const { isOpen, showConfirmation, handleConfirm, handleCancel } = useConfirmationDialog();
   const { data: trafficData, isLoading } = useQuery<TrafficRecord[]>({
     queryKey: ["/api/traffic"],
   });
@@ -44,9 +46,7 @@ export function TrafficTable() {
   });
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this traffic record?")) {
-      deleteMutation.mutate(id);
-    }
+    showConfirmation(() => deleteMutation.mutate(id));
   };
 
   const getStatusBadge = (status: string) => {
@@ -160,6 +160,18 @@ export function TrafficTable() {
           </Table>
         </div>
       </CardContent>
+
+      <ConfirmationDialog
+        isOpen={isOpen}
+        onClose={handleCancel}
+        onConfirm={handleConfirm}
+        title="Delete Traffic Record"
+        description="Are you sure you want to delete this traffic record? This action cannot be undone."
+        confirmText="Yes"
+        cancelText="No"
+        isLoading={deleteMutation.isPending}
+        variant="destructive"
+      />
     </Card>
   );
 }

@@ -2,6 +2,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { AppLayout } from "@/components/app-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ConfirmationDialog, useConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import {
   Table,
   TableBody,
@@ -21,6 +22,8 @@ import { Check, X, DollarSign, AlertCircle } from "lucide-react";
 export default function Payment() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { isOpen: isCancelDialogOpen, showConfirmation: showCancelConfirmation, handleConfirm: handleCancelConfirm, handleCancel: handleCancelDialog } = useConfirmationDialog();
+  const { isOpen: isAcceptDialogOpen, showConfirmation: showAcceptConfirmation, handleConfirm: handleAcceptConfirm, handleCancel: handleAcceptDialog } = useConfirmationDialog();
   const isSuperAdmin = user?.role === "super_admin";
 
   // Query to get pending payment requests
@@ -70,11 +73,11 @@ export default function Payment() {
   });
 
   const handleAccept = (paymentId: string) => {
-    acceptPaymentMutation.mutate(paymentId);
+    showAcceptConfirmation(() => acceptPaymentMutation.mutate(paymentId));
   };
 
   const handleCancel = (paymentId: string) => {
-    cancelPaymentMutation.mutate(paymentId);
+    showCancelConfirmation(() => cancelPaymentMutation.mutate(paymentId));
   };
 
   return (
@@ -199,6 +202,32 @@ export default function Payment() {
             )}
           </CardContent>
         </Card>
+
+        {/* Accept Payment Confirmation Dialog */}
+        <ConfirmationDialog
+          isOpen={isAcceptDialogOpen}
+          onClose={handleAcceptDialog}
+          onConfirm={handleAcceptConfirm}
+          title="Accept Payment Request"
+          description="Are you sure you want to accept this payment request? This will move the client to the Paid Clients section and cannot be easily undone."
+          confirmText="Yes"
+          cancelText="No"
+          isLoading={acceptPaymentMutation.isPending}
+          variant="default"
+        />
+
+        {/* Cancel Payment Confirmation Dialog */}
+        <ConfirmationDialog
+          isOpen={isCancelDialogOpen}
+          onClose={handleCancelDialog}
+          onConfirm={handleCancelConfirm}
+          title="Cancel Payment Request"
+          description="Are you sure you want to cancel this payment request? This action will permanently remove the request and cannot be undone."
+          confirmText="Yes"
+          cancelText="No"
+          isLoading={cancelPaymentMutation.isPending}
+          variant="destructive"
+        />
       </div>
     </AppLayout>
   );

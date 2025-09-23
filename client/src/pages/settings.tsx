@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
@@ -49,6 +50,7 @@ const categoryLabels = {
 export default function Settings() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { isOpen: isDeleteDialogOpen, showConfirmation, handleConfirm, handleCancel } = useConfirmationDialog();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedSetting, setSelectedSetting] = useState<Setting | null>(null);
@@ -170,9 +172,7 @@ export default function Settings() {
   };
 
   const handleDeleteClick = (settingId: string) => {
-    if (confirm("Are you sure you want to delete this setting? This will remove it from all dropdown menus.")) {
-      deleteSettingMutation.mutate(settingId);
-    }
+    showConfirmation(() => deleteSettingMutation.mutate(settingId));
   };
 
   if (!isSuperAdmin) {
@@ -441,6 +441,19 @@ export default function Settings() {
             </Form>
           </DialogContent>
         </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <ConfirmationDialog
+          isOpen={isDeleteDialogOpen}
+          onClose={handleCancel}
+          onConfirm={handleConfirm}
+          title="Delete Setting"
+          description="Are you sure you want to delete this setting? This will remove it from all dropdown menus and cannot be undone."
+          confirmText="Yes"
+          cancelText="No"
+          isLoading={deleteSettingMutation.isPending}
+          variant="destructive"
+        />
       </div>
     </AppLayout>
   );
