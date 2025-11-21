@@ -32,9 +32,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication routes
   await setupAuth(app);
 
-  // Serve uploaded files with authentication required
-  app.use("/uploads", requireEnabledUser, express.static(uploadsDir));
-
   // Traffic management routes
   app.get("/api/traffic", requireEnabledUser, async (req, res) => {
     
@@ -498,16 +495,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const response: { profilePicture?: string; curriculumVitae?: string } = {};
 
       if (files.profilePicture && files.profilePicture[0]) {
-        response.profilePicture = `/uploads/${files.profilePicture[0].filename}`;
+        response.profilePicture = `/api/uploads/${files.profilePicture[0].filename}`;
       }
 
       if (files.curriculumVitae && files.curriculumVitae[0]) {
-        response.curriculumVitae = `/uploads/${files.curriculumVitae[0].filename}`;
+        response.curriculumVitae = `/api/uploads/${files.curriculumVitae[0].filename}`;
       }
 
       res.json(response);
     } catch (error) {
       res.status(500).json({ message: "File upload failed", error });
+    }
+  });
+
+  // Authenticated file serving endpoint
+  app.get("/api/uploads/:filename", requireEnabledUser, async (req, res) => {
+    try {
+      const filename = req.params.filename;
+      
+      // Validate filename to prevent directory traversal attacks
+      if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+        return res.status(400).json({ message: "Invalid filename" });
+      }
+
+      const filePath = path.join(uploadsDir, filename);
+
+      // Check if file exists
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: "File not found" });
+      }
+
+      // Stream the file to the client
+      res.sendFile(filePath);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to serve file", error });
     }
   });
 
