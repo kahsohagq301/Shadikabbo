@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { FileUpload } from "@/components/ui/file-upload";
 import { ArrowLeft, ArrowRight, CreditCard, X } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -88,10 +89,48 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
     afterMarriageFee: 0,
   });
 
+  const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
   const createTrafficMutation = useMutation({
     mutationFn: async (data: any) => {
-      // First, create the traffic record
-      const trafficResponse = await apiRequest("POST", "/api/traffic", data);
+      setUploadError(null);
+      
+      // First, upload files if present
+      let uploadedFiles = { profilePicture: data.profilePicture, curriculumVitae: data.curriculumVitae };
+      
+      if (profilePictureFile || cvFile) {
+        const formData = new FormData();
+        if (profilePictureFile) {
+          formData.append('profilePicture', profilePictureFile);
+        }
+        if (cvFile) {
+          formData.append('curriculumVitae', cvFile);
+        }
+
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',
+        });
+
+        if (!uploadResponse.ok) {
+          const errorData = await uploadResponse.json().catch(() => ({ message: 'File upload failed' }));
+          throw new Error(errorData.message || 'File upload failed');
+        }
+
+        uploadedFiles = await uploadResponse.json();
+      }
+
+      // Create traffic record with uploaded file URLs
+      const trafficDataToSubmit = {
+        ...data,
+        profilePicture: uploadedFiles.profilePicture || data.profilePicture,
+        curriculumVitae: uploadedFiles.curriculumVitae || data.curriculumVitae,
+      };
+
+      const trafficResponse = await apiRequest("POST", "/api/traffic", trafficDataToSubmit);
       const trafficData = await trafficResponse.json();
       
       // If payment information is provided, create a payment request
@@ -125,9 +164,11 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
       resetForm();
     },
     onError: (error: any) => {
+      const errorMessage = error?.message || "Failed to create traffic record and payment request";
+      setUploadError(errorMessage);
       toast({
         title: "Error",
-        description: "Failed to create traffic record and payment request",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -165,6 +206,9 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
       paymentMethod: "",
       afterMarriageFee: 0,
     });
+    setProfilePictureFile(null);
+    setCvFile(null);
+    setUploadError(null);
   };
 
   const handleClose = () => {
@@ -549,28 +593,30 @@ export function AddTrafficModal({ isOpen, onClose }: AddTrafficModalProps) {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="profilePicture" className="text-sm font-semibold text-foreground">Profile Picture URL</Label>
-                  <Input
-                    id="profilePicture"
-                    value={formData.profilePicture}
-                    onChange={(e) => updateFormData("profilePicture", e.target.value)}
-                    placeholder="Enter profile picture URL"
-                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
-                    data-testid="input-profile-picture"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="curriculumVitae" className="text-sm font-semibold text-foreground">CV/Resume URL</Label>
-                  <Input
-                    id="curriculumVitae"
-                    value={formData.curriculumVitae}
-                    onChange={(e) => updateFormData("curriculumVitae", e.target.value)}
-                    placeholder="Enter CV/Resume URL"
-                    className="h-11 border-2 border-input hover:border-primary/50 focus:border-primary transition-colors"
-                    data-testid="input-curriculum-vitae"
-                  />
-                </div>
+                <FileUpload
+                  label="Profile Picture"
+                  id="profilePicture"
+                  accept="image/*"
+                  fileType="image"
+                  value={formData.profilePicture}
+                  onChange={(file, url) => {
+                    setProfilePictureFile(file);
+                    updateFormData("profilePicture", url);
+                  }}
+                  testId="input-profile-picture"
+                />
+                <FileUpload
+                  label="CV/Resume"
+                  id="curriculumVitae"
+                  accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  fileType="document"
+                  value={formData.curriculumVitae}
+                  onChange={(file, url) => {
+                    setCvFile(file);
+                    updateFormData("curriculumVitae", url);
+                  }}
+                  testId="input-curriculum-vitae"
+                />
               </div>
 
               <div className="space-y-2 mt-6">

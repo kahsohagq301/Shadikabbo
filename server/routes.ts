@@ -1,9 +1,13 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
 import { insertTrafficSchema, insertPaymentSchema, insertUserSchema, userSafeUpdateSchema, userAdminUpdateSchema, insertSettingSchema, updateSettingSchema } from "@shared/schema";
 import { hashPassword } from "./security";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 // Middleware to block disabled users
 function requireEnabledUser(req: any, res: any, next: any) {
@@ -19,8 +23,17 @@ function requireEnabledUser(req: any, res: any, next: any) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Configure uploads directory for file storage
+  const uploadsDir = path.join(process.cwd(), "uploads");
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+
   // Setup authentication routes
   await setupAuth(app);
+
+  // Serve uploaded files with authentication required
+  app.use("/uploads", requireEnabledUser, express.static(uploadsDir));
 
   // Traffic management routes
   app.get("/api/traffic", requireEnabledUser, async (req, res) => {
@@ -429,6 +442,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.sendStatus(204);
     } catch (error) {
       res.status(500).json({ message: "Failed to delete setting", error });
+    }
+  });
+
+  // Configure multer for file uploads
+  const multerStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, uploadsDir);
+    },
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const ext = path.extname(file.originalname);
+      const name = path.basename(file.originalname, ext).replace(/\s+/g, '-');
+      cb(null, `${name}-${uniqueSuffix}${ext}`);
+    }
+  });
+
+  const upload = multer({
+    storage: multerStorage,
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10MB limit
+    },
+    fileFilter: (req, file, cb) => {
+      // Allow images for profile pictures
+      if (file.fieldname === 'profilePicture') {
+        const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (allowedMimes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new Error('Only image files are allowed for profile picture'));
+        }
+      }
+      // Allow PDFs and documents for CV
+      else if (file.fieldname === 'curriculumVitae') {
+        const allowedMimes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (allowedMimes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new Error('Only PDF and Word documents are allowed for CV'));
+        }
+      }
+      else {
+        cb(null, true);
+      }
+    }
+  });
+
+  // File upload endpoint
+  app.post("/api/upload", requireEnabledUser, upload.fields([
+    { name: 'profilePicture', maxCount: 1 },
+    { name: 'curriculumVitae', maxCount: 1 }
+  ]), async (req, res) => {
+    try {
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+      const response: { profilePicture?: string; curriculumVitae?: string } = {};
+
+      if (files.profilePicture && files.profilePicture[0]) {
+        response.profilePicture = `/uploads/${files.profilePicture[0].filename}`;
+      }
+
+      if (files.curriculumVitae && files.curriculumVitae[0]) {
+        response.curriculumVitae = `/uploads/${files.curriculumVitae[0].filename}`;
+      }
+
+      res.json(response);
+    } catch (error) {
+      res.status(500).json({ message: "File upload failed", error });
     }
   });
 
